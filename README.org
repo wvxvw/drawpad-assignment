@@ -1,0 +1,92 @@
+* Rationale
+  The project will implement a limited subset of PostScript language
+  sufficient to render simple (two-dimensional) geometrical shapes
+  
+  List of operators to implement:
+  - =closepath=
+  - =lineto=
+  - =moveto=
+  - =newpath=
+  - =rlineto=
+  - =rmoveto=
+  - =fill=
+  - =setlinewidth=
+  - =stroke=
+  - =showpage=
+  - =setrgbcolor= 
+    /not implementing/ =setgray= /in an effort to reduce the workload/
+  
+  If time allows, also implement basic control structures, words and loops.
+
+  The reason for choosing PostScript over other candidtates, which I shall discuss
+  shortly was that it is the oldest industry standards, has canonical text
+  representation suitable for human reader, is easy to implement, can be
+  implemented iteratively, can be compiled to opcodes to reduce the file size,
+  can be trivially validated for basic syntax consistency, is backened by a standard.
+
+  Below is the table of all other formats I've considered.
+
+  | <8>      | <8>      | <8>      | <8>      | <8>      | <8>      |
+  | Language | Human-readable | Industry support | Easy to implement | Expressivenes | Standard |
+  |----------+----------+----------+----------+----------+----------|
+  | SVG      | Yes      | Poor     | Moderate (difficult to extract a small subset) | Finite automata | Yes      |
+  | SWF      | No       | Single vendor | Difficult | Turing-complete | Official white-paper |
+  | LaTeX    | Yes      | Average  | Difficult | Turing-complete | No       |
+  | PS       | Yes      | Good     | Easy     | Turing-complete | Official whitepaper |
+  | XAML^1   | Yes      | Single vendor | Unknown  | Finite automata | Unknown  |
+  | FXG^2    | Yes      | Single vendor | Easy (exists) | Finite automata | No       |
+
+  1. I've not done much research on XAML graphic definition language simply because
+     I don't like Microsoft products, all I know is that it is not a standard in
+     any way and no tool outside Microsoft's own toolchain is using it.
+  2. FXG is implemented in Flex compiler (the MXMLC), however its use is bounded
+     by many additional requirement, some may impact human productivity, others
+     will impact performance. This was largerly dismissed on the grounds of
+     poor implementation.
+     
+  It was very tempting to simply use SWF format, perhaps drawing on the
+  work previously done by =hxswfml= project. I would prefer this solution
+  in the real world setting, however, the implementation seems too cumbersome
+  for the test assignment.
+
+* Project structure
+** PostScript module
+   - Parser
+   - Interpreter
+   
+   The =PostScript= module will provide means of loading and parsing of
+   the =PostScript= source code. It will receive input source code of a
+   program paired with the drawing surface and emit the interpreted output
+   into the surface.
+
+** Tools
+   - Keyboard Handler
+   - Mouse Handler
+   
+   The =Tools= module will capture and interpret user's input into the
+   executable commands.
+
+** Stage
+   - Canvas
+   - Stash
+   
+   The =Stage= module will display the results of the user's commands.
+
+** Bus
+   - History
+   The =Bus= module will connect the parts and provide the interface
+   to the outside world (load data, handle errors, persist data etc.)
+
+** Effects
+   The =Effects= module will provide a library of visual or sound effects
+   performed when user's action is carried out.
+
+* Technical description
+  As of time of this writing I don't have enough experience to try
+  to use =Stage3D= or similar modern rendering techniques, partially
+  because of time limit and because of the development setting
+  (=Stage3D= is buggy on Linux) this is out of scope for now.
+
+  Target Flash Player version: 11.8
+  SDK used for compilation: 4.11 (had to build from upstream developers
+  version, there's not Linux distribution any more).
