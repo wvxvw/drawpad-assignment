@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!-- -->
+<project name="drawpad" default="main" basedir=".">
+
+  <property name="FLEX_HOME" value="/home/wvxvw/Projects/flex-sdk"/>
+  <property name="src" value="${basedir}/src"/>
+  <property name="bin" value="${basedir}/bin"/>
+  <property name="playerglobal" value="/home/wvxvw/Projects/playerglobal/11.1"/>
+
+  <target name="main">
+    <taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/lib/flexTasks.jar"/>
+    <mxmlc file="${src}/tld/wvxvw/drawpad/Application.as"
+           output="${bin}/drawpad.swf">
+      <library-path/>
+      <source-path path-element="${src}"/>
+      <external-library-path dir="${playerglobal}">
+        <include name="playerglobal.swc"/>
+      </external-library-path>
+    </mxmlc>
+  </target>
+</project>
