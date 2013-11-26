@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
-# Nothe, this module cannot be installed using easy_install
-# you may need to build it on your own. I also depends on
+# Nothe, this module cannot be installed using pip
+# you may need to build it on your own. It also depends on
 # setuptools, so you need to make sure you have that installed
 # http://sourceforge.net/projects/mysql-python/
 import MySQLdb

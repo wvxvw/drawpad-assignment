@@ -19,6 +19,8 @@ package tld.wvxvw.drawpad.stage {
         public var renderer:DisplayObjectContainer;
 
         private const children:Vector.<DisplayObject> = new <DisplayObject>[];
+        private const commands:Vector.<String> =
+            new <String>["yank", "place", "move", "select", "unselect"];
         private var selection:DisplayObject;
         private var history:History;
         private var eventServer:IServer;
@@ -31,7 +33,11 @@ package tld.wvxvw.drawpad.stage {
         }
 
         public function handle(response:String, ...data:Array):void {
-
+            if (this.commands.indexOf(response) > -1) {
+                if (data && data.length)
+                    (this[response] as Function).apply(this, data);
+                else this[response]();
+            }
         }
         
         private function init(renderer:DisplayObjectContainer):void {
@@ -40,6 +46,22 @@ package tld.wvxvw.drawpad.stage {
 
         public function yank(child:DisplayObject):void {
             this.doInteractiveCommand(this.yankCommand(child));
+        }
+
+        public function place(child:DisplayObject):void {
+            this.doInteractiveCommand(this.placeCommand(child));
+        }
+
+        public function select(x:int, y:int):void {
+            this.doInteractiveCommand(this.selectCommand(x, y));
+        }
+
+        public function unselect():void {
+            this.doInteractiveCommand(this.unselectCommand());
+        }
+
+        public function move(x:int, y:int):void {
+            this.doInteractiveCommand(this.moveCommand(x, y));
         }
 
         private function doInteractiveCommand(action:Vector.<Function>):void {

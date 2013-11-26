@@ -12,9 +12,9 @@ package tld.wvxvw.drawpad.bus {
             super();
         }
 
-        public function push(command:ICommand, ...args:Array):void {
-            if (this.inhibit) command.execute(args);
-            else this.commands.push(command.execute(args));
+        public function push(command:ICommand):void {
+            if (this.inhibit) command.execute();
+            else this.commands.push(command.execute());
         }
 
         public function undo():void {

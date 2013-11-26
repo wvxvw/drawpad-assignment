@@ -2,25 +2,25 @@ package tld.wvxvw.drawpad.bus {
     
     public class Command implements ICommand {
 
-        private var method:Function;
+        private var action:Function;
         private var restore:Function;
         
-        public function Command(method:Function, restore:Function) {
+        public function Command(action:Function, restore:Function) {
             super();
-            this.method = method;
+            this.action = action;
             this.restore = restore;
         }
         
         /** @inheritDoc */
-        public function execute(args:Array):ICommand {
-            if (args.length) this.method.apply(null, args);
-            else this.method();
+        public function execute():ICommand {
+            this.action();
             return this;
         }
 
         /** @inheritDoc */
-        public function undo():void {
+        public function undo():ICommand {
             this.restore();
+            return this;
         }
     }
 }

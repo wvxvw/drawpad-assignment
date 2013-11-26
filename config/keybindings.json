@@ -1,0 +1,4 @@
+{
+    "prefix": ["C", "M", "S"],
+    "bindings": {"C-h": "help"}
+}

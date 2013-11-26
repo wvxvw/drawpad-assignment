@@ -6,14 +6,15 @@ package tld.wvxvw.drawpad {
     import flash.display.StageAlign;
     import tld.wvxvw.debugging.Console;
     import tld.wvxvw.drawpad.bus.History;
-    import tld.wvxvw.drawpad.bus.Server;
+    import tld.wvxvw.drawpad.bus.EventServer;
+    import tld.wvxvw.drawpad.config.Keybindings;
     import tld.wvxvw.drawpad.stage.Canvas;
     
     public class Application extends Sprite {
 
         private var canvas:Canvas;
         private var history:History = new History();
-        private var server:Server;
+        private var server:EventServer;
         
         public function Application() {
             super();
@@ -22,12 +23,16 @@ package tld.wvxvw.drawpad {
         }
 
         private function init(event:Event = null):void {
-            Console.log("it works!");
+            Console.debug("Initiating application");
             super.stage.scaleMode = StageScaleMode.NO_SCALE;
             super.stage.align = StageAlign.TOP_LEFT;
             this.canvas = new Canvas(this.history, this);
-            this.server = new Server(super.stage);
-            this.server.addClient(this.canvas);
+            Console.debug("Starting EventServer");
+            this.server = new EventServer(super.stage);
+            Console.debug("EventServer started");
+            this.server.loadConfig(new Keybindings().resource)
+            this.server.add(this.canvas);
+            Console.debug("Application initiated");
         }
     }
 }

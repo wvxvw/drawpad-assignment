@@ -2,6 +2,7 @@ package tld.wvxvw.drawpad.tools {
 
     import flash.events.KeyboardEvent;
     import flash.ui.Keyboard;
+    import tld.wvxvw.debugging.Console;
 
     /**
      * This class behaves similar to Emacs <code>keymap</code>
@@ -39,8 +40,9 @@ package tld.wvxvw.drawpad.tools {
             this.bindings[keycode] = handler;
         }
 
-        public function definePrefixKey(keycode:String):void {
-            this.prefixKeys[this.parseKeycode(keycode)] = true;
+        public function definePrefixKey(key:String):void {
+            Console.debug("definePrefixKey", key);
+            this.prefixKeys[key] = true;
         }
 
         public function dispatch(event:KeyboardEvent):void {

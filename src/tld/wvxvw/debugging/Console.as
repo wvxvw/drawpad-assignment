@@ -14,19 +14,19 @@ package tld.wvxvw.debugging {
         public function Console() { super(); }
 
         public static function log(...rest:Array):void {
-            if (level <= LOG) send("log", rest);
+            if (level >= LOG) send("log", rest);
         }
 
         public static function debug(...rest:Array):void {
-            if (level <= DEBUG) send("debug", rest);
+            if (level >= DEBUG) send("debug", rest);
         }
 
         public static function warn(...rest:Array):void {
-            if (level <= WARN) send("warn", rest);
+            if (level >= WARN) send("warn", rest);
         }
 
         public static function error(...rest:Array):void {
-            if (level <= ERROR) send("error", rest);
+            if (level >= ERROR) send("error", rest);
         }
 
         private static function send(command:String, args:Array):void {
