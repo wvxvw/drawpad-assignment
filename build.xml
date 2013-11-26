@@ -11,7 +11,8 @@
   <target name="main">
     <taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/lib/flexTasks.jar"/>
     <mxmlc file="${src}/tld/wvxvw/drawpad/Application.as"
-           output="${bin}/drawpad.swf">
+           output="${bin}/drawpad.swf"
+           compiler.warn-unlikely-function-value="false">
       <library-path/>
       <source-path path-element="${src}"/>
       <external-library-path dir="${playerglobal}">

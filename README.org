@@ -74,6 +74,7 @@
 
 ** Bus
    - History
+   - Server
    The =Bus= module will connect the parts and provide the interface
    to the outside world (load data, handle errors, persist data etc.)
 

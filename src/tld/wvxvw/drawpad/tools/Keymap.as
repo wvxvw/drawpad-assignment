@@ -1,6 +1,7 @@
 package tld.wvxvw.drawpad.tools {
 
     import flash.events.KeyboardEvent;
+    import flash.ui.Keyboard;
 
     /**
      * This class behaves similar to Emacs <code>keymap</code>
@@ -12,7 +13,7 @@ package tld.wvxvw.drawpad.tools {
     public class Keymap {
 
         private var currentPrefix:String = "";
-        private var defaultAction;
+        private var defaultAction:Function;
         private var keyUp:Boolean;
         private const bindings:Object = {};
         private const prefixKeys:Object = {};
@@ -23,9 +24,9 @@ package tld.wvxvw.drawpad.tools {
                          "<deletechar>", "<insert>", "<home>", "<prior>",
                          "<end>", "<next>", "<up>", "<left>", "<down>",
                          "<right>", "<tab>", "f1", "f2", "f3", "f4", "f5",
-                         "f6", "f7", "f8", "f9", "f10", "f11", "f12"])));
+                         "f6", "f7", "f8", "f9", "f10", "f11", "f12"]));
         
-        public function Kymap(bindings:Object = null,
+        public function Keymap(bindings:Object = null,
             defaultAction:Function = null) {
             super();
             this.defaultAction = defaultAction;
@@ -150,7 +151,7 @@ package tld.wvxvw.drawpad.tools {
 
         private function init():void {
             if (this.defaultAction)
-                foreach (var key:String in this.defaultKeys)
+                for each (var key:String in this.defaultKeys)
                     if (!(key in this.bindings))
                         this.bindings[key] = this.defaultAction;
         }

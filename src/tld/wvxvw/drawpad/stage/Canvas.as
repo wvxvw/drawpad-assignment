@@ -6,15 +6,22 @@ package tld.wvxvw.drawpad.stage {
     import flash.geom.Matrix;
     import tld.wvxvw.drawpad.bus.History;
     import tld.wvxvw.drawpad.bus.Command;
+    import tld.wvxvw.drawpad.bus.IClient;
+    import tld.wvxvw.drawpad.bus.IServer;
     import tld.wvxvw.functions.Futils;
     
-    public class Canvas extends EventDispatcher {
+    public class Canvas extends EventDispatcher implements IClient {
 
+        public function set server(value:IServer):void {
+            this.eventServer = value;
+        }
+        
         public var renderer:DisplayObjectContainer;
 
         private const children:Vector.<DisplayObject> = new <DisplayObject>[];
         private var selection:DisplayObject;
         private var history:History;
+        private var eventServer:IServer;
         
         public function Canvas(history:History,
             renderer:DisplayObjectContainer = null) {
@@ -23,6 +30,10 @@ package tld.wvxvw.drawpad.stage {
             if (renderer) this.init(renderer);
         }
 
+        public function handle(response:String, ...data:Array):void {
+
+        }
+        
         private function init(renderer:DisplayObjectContainer):void {
             renderer.mouseChildren = false;
         }
