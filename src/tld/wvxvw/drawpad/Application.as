@@ -2,6 +2,7 @@ package tld.wvxvw.drawpad {
     
     import flash.display.Sprite;
     import flash.events.Event;
+    import tld.wvxvw.debugging.Console;
     
     public class Application extends Sprite {
 
@@ -12,7 +13,7 @@ package tld.wvxvw.drawpad {
         }
 
         private function init(event:Event = null):void {
-            trace("it works!");
+            Console.log("it works!");
         }
     }
 }

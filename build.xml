@@ -4,7 +4,8 @@
 
   <property name="FLEX_HOME" value="/home/wvxvw/Projects/flex-sdk"/>
   <property name="src" value="${basedir}/src"/>
-  <property name="bin" value="${basedir}/bin"/>
+  <property name="bin" value="${basedir}/www"/>
+  <property name="tpl" value="${basedir}/tpl"/>
   <property name="playerglobal" value="/home/wvxvw/Projects/playerglobal/11.1"/>
 
   <target name="main">
@@ -17,5 +18,6 @@
         <include name="playerglobal.swc"/>
       </external-library-path>
     </mxmlc>
+    <copy file="${tpl}/drawpad.html" todir="${bin}"/>
   </target>
 </project>
