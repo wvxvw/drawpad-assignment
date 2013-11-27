@@ -20,7 +20,7 @@ package tld.wvxvw.postscript {
         private var callback:Function;
         private var lastHandler:Function;
         private var bufferSize:uint = 1024;
-        private var buffer:0;
+        private var buffer:uint;
         private var defaultDelimiters:RegExp = /\s+/g;
         private var delimiter:RegExp;
         private var leftover:uint;
@@ -33,16 +33,16 @@ package tld.wvxvw.postscript {
         private function startReading(callback:Function, handler:Function):void {
             if (!this.isAtEnd) {
                 this.callback = callback;
-                if (this.buffer) this.handler();
+                if (this.buffer) handler();
                 else {
                     this.buffer =
                         Math.min(this.bufferSize,
                             this.source.length - this.position);
                     if (this.lastHandler)
                         this.timer.removeEventListener(
-                            TimerEvent.TICK, this.lastHandler);
+                            TimerEvent.TIMER, this.lastHandler);
                     this.timer.addEventListener(
-                        TimerEvent.TICK, this.lastHandler = this.handler);
+                        TimerEvent.TIMER, this.lastHandler = handler);
                     this.timer.reset();
                     this.timer.start();
                 }
@@ -78,7 +78,7 @@ package tld.wvxvw.postscript {
                 if (this.delimiter.lastIndex <=
                     this.position + this.buffer + this.leftover) {
                     this.buffer = this.leftover = 0;
-                    this.handler(
+                    this.callback(
                         this.source.substr(
                             this.position, this.delimiter.lastIndex));
                     this.position = this.delimiter.lastIndex + result[0].length;
@@ -95,7 +95,7 @@ package tld.wvxvw.postscript {
             } else if (this.position + this.buffer + this.leftover >=
                 this.source.length) {
                 this.buffer = this.leftover = 0;
-                this.handler(this.source.substr(this.position));
+                this.callback(this.source.substr(this.position));
                 this.position = this.source.length;
                 this.lastResult = null;
                 // We are at the end of the string, but there isn't enough

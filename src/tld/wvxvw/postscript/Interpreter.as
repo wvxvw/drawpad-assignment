@@ -1,6 +1,7 @@
 package tld.wvxvw.postscript {
 
     import flash.display.Graphics;
+    import flash.display.Shape;
     import flash.events.EventDispatcher;
     import flash.events.AsyncErrorEvent;
 
@@ -8,23 +9,24 @@ package tld.wvxvw.postscript {
     
     public class Interpreter extends EventDispatcher {
 
+        public function get shape():Shape { return this.context.shape; }
+        
         private var stream:IAsyncInputStream;
         private var opcodes:Opcodes = new Opcodes();
-        private var context:Graphics;
-        private var stream:IAsyncInputStream;
-        private var reader:Reader = new Reader();
-        private var stack:Array = [];
+        private var context:Context;
+        private const reader:Reader = new Reader();
+        private const stack:Array = [];
         
         public function Interpreter(stream:IAsyncInputStream = null,
-            graphics:Graphics = null) {
+            context:Context = null) {
             super();
-            if (stream && graphics) this.interpret(stream, graphics);
+            if (stream && shape) this.interpret(stream, context);
         }
 
         public function interpret(stream:IAsyncInputStream,
-            graphics:Graphics):void {
+            context:Context):void {
             if (!stream.isAtEnd) {
-                this.context = graphics;
+                this.context = context;
                 this.stream = stream;
                 stream.readChar(this.onReadChar);
             }

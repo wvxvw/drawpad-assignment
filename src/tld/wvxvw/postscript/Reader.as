@@ -1,5 +1,7 @@
 package tld.wvxvw.postscript {
 
+    import flash.events.EventDispatcher;
+    
     public class Reader extends EventDispatcher {
 
         public var token:String;
@@ -8,7 +10,7 @@ package tld.wvxvw.postscript {
         
         public function Reader() { super(); }
 
-        private function read(char:String):void {
+        public function read(char:String):void {
             
         }
     }

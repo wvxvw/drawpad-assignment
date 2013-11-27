@@ -9,12 +9,14 @@ package tld.wvxvw.drawpad {
     import tld.wvxvw.drawpad.bus.EventServer;
     import tld.wvxvw.drawpad.config.Keybindings;
     import tld.wvxvw.drawpad.stage.Canvas;
+    import tld.wvxvw.postscript.PS;
     
     public class Application extends Sprite {
 
         private var canvas:Canvas;
-        private var history:History = new History();
         private var server:EventServer;
+        private const history:History = new History();
+        private const ps:PS = new PS();
         
         public function Application() {
             super();
