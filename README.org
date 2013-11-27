@@ -138,7 +138,7 @@
   server:
   : $ cd $basedir/server
   : $ ./services.py &
-  Now the project should be available at http://localhost:8080/
+  Now the project should be available at [[http://localhost:8080/]]
   See:
   : $ ./services.py --help
   for details on running the server.

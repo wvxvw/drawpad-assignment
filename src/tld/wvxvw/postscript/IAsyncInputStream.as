@@ -25,5 +25,17 @@ package tld.wvxvw.postscript {
          * @throws flash.errors.EOFError
          */
         function readChar(callback:Function):void;
+
+        /**
+         * Reads all input up to <code>\n</code> character.
+         */
+        function readLine(callback:Function):void;
+
+        /**
+         * Reads input delimited by <code>delimiter</code> invoking
+         * <code>callback</code> on the chunk of intput up to, but not
+         * including the delimiter.
+         */
+        function readToken(callback:Function, delimiter:RegExp = null):void;
     }
 }

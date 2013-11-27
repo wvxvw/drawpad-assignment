@@ -16,7 +16,7 @@ package tld.wvxvw.postscript {
         private var stream:IAsyncInputStream;
         private var opcodes:Opcodes = new Opcodes();
         private var context:Context;
-        private const reader:Reader = new Reader();
+        private var reader:Reader;
         private const stack:Array = [];
         
         public function Interpreter(stream:IAsyncInputStream = null,
@@ -28,45 +28,16 @@ package tld.wvxvw.postscript {
         public function interpret(stream:IAsyncInputStream,
             context:Context):void {
             if (!stream.isAtEnd) {
+                this.reader = new Reader(context);
                 this.context = context;
                 this.stream = stream;
-                stream.readChar(this.onReadChar);
+                stream.readToken(this.onReadToken);
             }
         }
 
-        private function onReadChar(char:String):void {
-            this.advance(char);
-            if (!this.stream.isAtEnd) stream.readChar(this.onReadChar);
-            else super.dispatchEvent(new Event(Event.COMPLETE));
-        }
-
-        private function advance(char:String):void {
-            var token:String, opcode:IOpcode;
-            
-            this.reader.read(char);
-            if (this.reader.token) {
-                token = this.reader.token;
-                if (token in this.opcodes) {
-                    opcode = this.opcodes[token] as IOpcode;
-                    if (this.stack.length >= opcode.arity) {
-                        opcode.invoke(this.context,
-                            this.stack.splice(
-                                this.stack.length - opcode.arity, opcode.arity));
-                    } else super.dispatchEvent(
-                        new AsyncErrorEvent(
-                            AsyncErrorEvent.ASYNC_ERROR, false, false,
-                            ErrorMessages.ARGUMENT_COUNT_MISMATCH,
-                            new PostScriptError(
-                                ErrorMessages.ARGUMENT_COUNT_MISMATCH,
-                                opcode, opcode.arity, this.stack.length)));
-                } else if (!isNaN(parseFloat(token))) {
-                    this.stack.push(parseFloat(token));
-                } else super.dispatchEvent(
-                    new AsyncErrorEvent(
-                        AsyncErrorEvent.ASYNC_ERROR, false, false,
-                        ErrorMessages.UNKNOWN_OPCODE,
-                        new PostScriptError(ErrorMessages.UNKNOWN_OPCODE, token)));
-            }
+        private function onReadToken(token:String):void {
+            this.reader.read(token);
+            if (!this.stream.isAtEnd) stream.readToken(this.onReadToken);
         }
     }
 }

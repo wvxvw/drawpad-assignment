@@ -6,10 +6,15 @@ package tld.wvxvw.postscript.ops {
     public class StrokeOp implements IOpcode {
 
         public function StrokeOp() { super(); }
+
+        /** @inheritDoc */
+        public function bind(context:Context, arg:Object):Boolean {
+            throw "should'nt happen";
+        }
         
         /** @inheritDoc */
-        public function invoke(context:Context, ...rest:Array):void {
-
+        public function invoke(context:Context):void {
+            context.flush();
         }
 
         /** @inheritDoc */

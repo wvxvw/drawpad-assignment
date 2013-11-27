@@ -3,21 +3,20 @@ package tld.wvxvw.postscript.ops {
     import tld.wvxvw.postscript.Context;
     import tld.wvxvw.postscript.IOpcode;
     
-    public class ShowpageOp implements IOpcode {
+    public class CommentEndOp implements IOpcode {
 
-        public function ShowpageOp() { super(); }
+        public function CommentEndOp() { super(); }
 
-        /** @inheritDoc */
         public function bind(context:Context, arg:Object):Boolean {
-            throw "should'nt happen";
+            throw "should never happen";
         }
         
         /** @inheritDoc */
         public function invoke(context:Context):void {
-
+            context.isComment = false;
         }
 
         /** @inheritDoc */
-        public function get arity():uint { return 0; }
+        public function get arity():uint { return uint.MAX_VALUE; }
     }
 }

@@ -7,9 +7,14 @@ package tld.wvxvw.postscript.ops {
     public class FillOp implements IOpcode {
 
         public function FillOp() { super(); }
+
+        /** @inheritDoc */
+        public function bind(context:Context, arg:Object):Boolean {
+            throw "should not happen";
+        }
         
         /** @inheritDoc */
-        public function invoke(context:Context, ...rest:Array):void {
+        public function invoke(context:Context):void {
             context.solidFill = new GraphicsSolidFill(context.color);
         }
 

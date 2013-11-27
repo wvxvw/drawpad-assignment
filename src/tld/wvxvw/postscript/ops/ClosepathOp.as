@@ -6,9 +6,14 @@ package tld.wvxvw.postscript.ops {
     public class ClosepathOp implements IOpcode {
 
         public function ClosepathOp() { super(); }
+
+        /** @inheritDoc */
+        public function bind(context:Context, arg:Object):Boolean {
+            throw "should not happen";
+        }
         
         /** @inheritDoc */
-        public function invoke(context:Context, ...rest:Array):void {
+        public function invoke(context:Context):void {
 
         }
 
