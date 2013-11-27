@@ -4,8 +4,10 @@ package tld.wvxvw.postscript {
     import flash.display.Shape;
     import flash.events.EventDispatcher;
     import flash.events.AsyncErrorEvent;
+    import flash.events.Event;
 
     [Event(type="flash.events.AsyncErrorEvent", name="asyncError")]
+    [Event(type="flash.events.Event", name="complete")]
     
     public class Interpreter extends EventDispatcher {
 
@@ -35,6 +37,7 @@ package tld.wvxvw.postscript {
         private function onReadChar(char:String):void {
             this.advance(char);
             if (!this.stream.isAtEnd) stream.readChar(this.onReadChar);
+            else super.dispatchEvent(new Event(Event.COMPLETE));
         }
 
         private function advance(char:String):void {

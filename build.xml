@@ -6,6 +6,7 @@
   <property name="src" value="${basedir}/src"/>
   <property name="bin" value="${basedir}/www"/>
   <property name="tpl" value="${basedir}/tpl"/>
+  <property name="test" value="${basedir}/tests"/>
   <property name="playerglobal" value="/home/wvxvw/Projects/playerglobal/11.1"/>
 
   <target name="main">
@@ -20,5 +21,20 @@
       </external-library-path>
     </mxmlc>
     <copy file="${tpl}/drawpad.html" todir="${bin}"/>
+  </target>
+
+  <target name="test">
+    <taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/lib/flexTasks.jar"/>
+    <mxmlc file="${test}/tld/wvxvw/tests/Suite.as"
+           output="${bin}/tests.swf"
+           compiler.warn-unlikely-function-value="false">
+      <library-path/>
+      <source-path path-element="${src}"/>
+      <source-path path-element="${test}"/>
+      <external-library-path dir="${playerglobal}">
+        <include name="playerglobal.swc"/>
+      </external-library-path>
+    </mxmlc>
+    <copy file="${tpl}/tests.html" todir="${bin}"/>
   </target>
 </project>

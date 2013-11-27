@@ -88,6 +88,57 @@
   because of time limit and because of the development setting
   (=Stage3D= is buggy on Linux) this is out of scope for now.
 
-  Target Flash Player version: 11.8
-  SDK used for compilation: 4.11 (had to build from upstream developers
-  version, there's not Linux distribution any more).
+  + Target Flash Player version: 11.8
+  + SDK used for compilation: 4.11 (had to build from upstream developers
+    version, there's not Linux distribution any more).
+  + Porject uses Apache Ant 1.8.4, but most likely will work with 
+    earlier versions too.
+
+* Building
+  The instructions are given for RHEL-like distro, based on my
+  experience with Fedora Cora 18, ymmv.
+  : # yum install ant git java-1.7.0-openjdk
+  This was the easy part...
+  Now, checkout Flex SDK:
+  : $ cd ~
+  : $ mkdir ./flex
+  : $ cd ./flex
+  : $ git clone https://git-wip-us.apache.org/repos/asf/flex-sdk.git sdk
+  I will refer to =~/flex/flex-sdk= directory as =$FLEX_HOME=, if
+  you cloned the SDK elsewhere, adjust your settings accordingly.
+  Read carefuly the Flex SDK readme and prepare to build it.
+
+  It should be only necessary that you build the compiler, this can
+  be can be done like so:
+  : $ cd $FLEX_SDK
+  : $ ant modules
+  You will only need =playerglobal.swc= and related part of the setup
+  as outlined in the readme. You don't need to build or download
+  neither TLF, nor AIR SDK. You will, however, need to download or
+  build Batic Java library (used in compiler to transcode fonts).
+  You don't need Blaze DS.
+
+  Now you should be set to build the project. I will refer to
+  project root directory as =$basedir=:
+  : $ cd $basedir
+  : $ vi ./build.xml
+  Change the value of =$FLEX_HOME= variable to where you installed
+  Flex SDK. Also change the value of =playerglobal= variable to
+  where you downloaded =playerglobal.swc=
+  : $ ant
+  You should be all set up now.
+
+* Testing
+  There's a minimal test suite, to test run the tests:
+  : $ ant test
+
+* Running
+  The project comes with a minimalist server written in Python.
+  Hopefully, no additional setup will be required. To start the
+  server:
+  : $ cd $basedir/server
+  : $ ./services.py &
+  Now the project should be available at http://localhost:8080/
+  See:
+  : $ ./services.py --help
+  for details on running the server.
