@@ -3,11 +3,12 @@ package tld.wvxvw.postscript {
     import flash.utils.Timer;
     import flash.errors.EOFError;
     import flash.events.TimerEvent;
+    import tld.wvxvw.debugging.Console;
     
     public class StringAsyncStream implements IAsyncInputStream {
 
         public function get isAtEnd():Boolean {
-            return this.position < this.source.length;
+            return this.position == this.source.length;
         }
 
         public function get isAtStart():Boolean {
@@ -28,6 +29,8 @@ package tld.wvxvw.postscript {
         
         public function StringAsyncStream(source:String) {
             super();
+            this.source = source;
+            Console.log("StringAsyncStream created");
         }
 
         private function startReading(callback:Function, handler:Function):void {
@@ -70,18 +73,27 @@ package tld.wvxvw.postscript {
 
         private function timerTokenHandler(event:TimerEvent = null):void {
             var result:Object =
-                this.lastResult || this.delimiter.exec(this.source);
-            
+                this.lastResult || this.delimiter.exec(this.source), match:String;
+
+            Console.log("result:", result);
             if (result) {
                 // We found next delimiter and we have enough space to
                 // read all the text up to it
+                match = result[0];
+                Console.log("Match:", "|" + match + "|");
                 if (this.delimiter.lastIndex <=
                     this.position + this.buffer + this.leftover) {
                     this.buffer = this.leftover = 0;
+                    Console.log("substring:", this.position,
+                        this.delimiter.lastIndex - match.length);
                     this.callback(
-                        this.source.substr(
-                            this.position, this.delimiter.lastIndex));
-                    this.position = this.delimiter.lastIndex + result[0].length;
+                        this.source.substring(
+                            this.position,
+                            this.delimiter.lastIndex >= this.position ?
+                            this.delimiter.lastIndex - match.length :
+                            this.source.length));
+                    this.position = this.delimiter.lastIndex;
+                    if (!match.length) this.delimiter.lastIndex++;
                     this.lastResult = null;
                     // We found next delimiter, but we didn't have enough
                     // buffer space to read up to it.
@@ -94,6 +106,7 @@ package tld.wvxvw.postscript {
                 // space to read all that remains
             } else if (this.position + this.buffer + this.leftover >=
                 this.source.length) {
+                Console.log("Last bit", this.position);
                 this.buffer = this.leftover = 0;
                 this.callback(this.source.substr(this.position));
                 this.position = this.source.length;

@@ -9,7 +9,10 @@ package tld.wvxvw.postscript.ops {
         public function FillOp() { super(); }
 
         /** @inheritDoc */
-        public function bind(context:Context, arg:Object):Boolean {
+        public function needMoreArguments():Boolean { return false; }
+
+        /** @inheritDoc */
+        public function bind(context:Context, arg:Object):void {
             throw "should not happen";
         }
         
@@ -17,8 +20,5 @@ package tld.wvxvw.postscript.ops {
         public function invoke(context:Context):void {
             context.solidFill = new GraphicsSolidFill(context.color);
         }
-
-        /** @inheritDoc */
-        public function get arity():uint { return 0; }
     }
 }

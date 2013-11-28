@@ -27,16 +27,25 @@ package tld.wvxvw.tests {
         }
 
         public function testSquare(where:Shape):void {
-            Console.log("Square testSquare");
-            new PS().load(SQUARE).addEventListener(
-                Event.COMPLETE, this.completeHandler);
-            Console.log("Square testSquare load start");
+            Console.log("Square testSquare", String(where));
+            try {
+                new PS().load(SQUARE, where).addEventListener(
+                    Event.COMPLETE, this.completeHandler);
+                Console.log("Square testSquare load start", String(where.stage));
+            } catch (throwable:*) {
+                Console.error("Error running test:", throwable);
+                if (throwable is Error) {
+                    for each (var line:String in
+                        (throwable as Error).getStackTrace().split("\n"))
+                        Console.error(line);
+                }
+            }
         }
 
         private function completeHandler(event:Event):void {
             var interpreter:Interpreter = event.currentTarget as Interpreter;
             Console.log("Square height:", interpreter.shape.height,
-                "Square width:", interpreter.shape.width);
+                "Square width:", interpreter.shape.width, String(interpreter.shape.stage));
         }
     }
 }

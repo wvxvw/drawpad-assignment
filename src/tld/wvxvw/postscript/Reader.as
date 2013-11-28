@@ -1,6 +1,7 @@
 package tld.wvxvw.postscript {
 
     import flash.events.EventDispatcher;
+    import flash.events.AsyncErrorEvent;
     import tld.wvxvw.postscript.ops.ClosepathOp;
     import tld.wvxvw.postscript.ops.CommentOp;
     import tld.wvxvw.postscript.ops.CommentEndOp;
@@ -16,6 +17,9 @@ package tld.wvxvw.postscript {
     import tld.wvxvw.postscript.ops.SetrgbcolorOp;
     import tld.wvxvw.postscript.ops.ShowpageOp;
     import tld.wvxvw.postscript.ops.StrokeOp;
+    import tld.wvxvw.postscript.ErrorMessages;
+    import tld.wvxvw.postscript.PostScriptError;
+    import tld.wvxvw.debugging.Console;
     
     public class Reader extends EventDispatcher {
 
@@ -38,7 +42,7 @@ package tld.wvxvw.postscript {
             "setrgbcolor" : SetrgbcolorOp,
             "showpage" : ShowpageOp,
             "stroke" : StrokeOp
-        }
+        };
         
         public function Reader(context:Context) {
             super();
@@ -46,19 +50,35 @@ package tld.wvxvw.postscript {
         }
 
         public function read(token:String):void {
+            Console.log("Reading token", token,
+                this.head.isString, this.head.isComment,
+                this.symols[token] == CommentEndOp);
             if (!(this.head.isString || this.head.isComment)) {
                 if (token in this.symols) {
-                    if (this.head.stack.length) {
-                        while (this.opcode.bind(
-                                this.head, this.head.stack.pop())) {};
-                        this.opcode.invoke(this.head);
-                        this.opcode = null;
-                    }
+                    Console.log("Processing:", token);
                     this.opcode = new this.symols[token]() as IOpcode;
+                    while (this.opcode.needMoreArguments()) {
+                        if (!this.head.stack.length) {
+                            super.dispatchEvent(
+                                new AsyncErrorEvent(AsyncErrorEvent.ASYNC_ERROR,
+                                    false, false, ErrorMessages.ARGUMENT_COUNT_MISMATCH,
+                                    new PostScriptError(ErrorMessages.ARGUMENT_COUNT_MISMATCH)));
+                        }
+                        this.opcode.bind(this.head, this.head.stack.pop());
+                    }
+                    this.opcode.invoke(this.head);
+                    this.opcode = null;
                 } else {
                     this.head.stack.push(token);
                 }
+            } else if ((!this.head.isString && this.head.isComment &&
+                this.symols[token] == CommentEndOp) ||
+                (!this.head.isComment && this.head.isString &&
+                this.symols[token] == EndStringOp)) {
+                Console.log("Uncomment or end string");
+                (new this.symols[token]() as IOpcode).invoke(this.head);
             }
+            Console.log("Finished token", token, this.head.isString, this.head.isComment);
         }
     }
 }

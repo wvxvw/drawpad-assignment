@@ -10,16 +10,16 @@ package tld.wvxvw.postscript.ops {
         public function MovetoOp() { super(); }
 
         /** @inheritDoc */
-        public function bind(context:Context, arg:Object):Boolean {
-            return Boolean(this.args.push(Number(arg), Number(arg)));
+        public function needMoreArguments():Boolean { return this.args.length < 2; }
+
+        /** @inheritDoc */
+        public function bind(context:Context, arg:Object):void {
+            this.args.push(Number(arg));
         }
         
         /** @inheritDoc */
         public function invoke(context:Context):void {
             context.path.moveTo(this.args[0], this.args[1]);
         }
-
-        /** @inheritDoc */
-        public function get arity():uint { return 2; }
     }
 }

@@ -8,7 +8,10 @@ package tld.wvxvw.postscript.ops {
         public function ShowpageOp() { super(); }
 
         /** @inheritDoc */
-        public function bind(context:Context, arg:Object):Boolean {
+        public function needMoreArguments():Boolean { return false; }
+
+        /** @inheritDoc */
+        public function bind(context:Context, arg:Object):void {
             throw "should'nt happen";
         }
         
@@ -16,8 +19,5 @@ package tld.wvxvw.postscript.ops {
         public function invoke(context:Context):void {
 
         }
-
-        /** @inheritDoc */
-        public function get arity():uint { return 0; }
     }
 }

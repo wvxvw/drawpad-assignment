@@ -7,17 +7,16 @@ package tld.wvxvw.postscript.ops {
 
         public function CommentOp() { super(); }
 
-        public function bind(context:Context, arg:Object):Boolean {
-            // just ignore whatever that is
-            return true;
+        /** @inheritDoc */
+        public function needMoreArguments():Boolean { return false; }
+        
+        public function bind(context:Context, arg:Object):void {
+            throw "should never happen";
         }
         
         /** @inheritDoc */
         public function invoke(context:Context):void {
             context.isComment = true;
         }
-
-        /** @inheritDoc */
-        public function get arity():uint { return uint.MAX_VALUE; }
     }
 }

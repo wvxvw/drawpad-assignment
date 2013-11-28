@@ -10,17 +10,17 @@ package tld.wvxvw.postscript.ops {
         public function RlinetoOp() { super(); }
 
         /** @inheritDoc */
-        public function bind(context:Context, arg:Object):Boolean {
-            return Boolean(this.args.push(arg as String));
+        public function needMoreArguments():Boolean { return this.args.length < 2; }
+
+        /** @inheritDoc */
+        public function bind(context:Context, arg:Object):void {
+            this.args.push(arg as String);
         }
         
         /** @inheritDoc */
         public function invoke(context:Context):void {
             context.position.offset(this.args[0], this.args[1]);
-            context.path.moveTo(context.position.x, context.position.y);
+            context.path.lineTo(context.position.x, context.position.y);
         }
-
-        /** @inheritDoc */
-        public function get arity():uint { return 2; }
     }
 }

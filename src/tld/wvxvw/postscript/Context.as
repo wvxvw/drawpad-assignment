@@ -9,6 +9,7 @@ package tld.wvxvw.postscript {
     import flash.display.GraphicsPath;
     import flash.display.GraphicsEndFill;
     import flash.geom.Point;
+    import tld.wvxvw.debugging.Console;
     
     public class Context {
 
@@ -29,7 +30,7 @@ package tld.wvxvw.postscript {
         }
 
         public function set isComment(value:Boolean):void {
-            this._isString = value;
+            this._isComment = value;
         }
 
         public var parent:Context;
@@ -53,6 +54,7 @@ package tld.wvxvw.postscript {
             this.shape = shape;
             this.graphics = shape.graphics;
             this.position = new Point();
+            Console.log("Context created");
         }
 
         /**
@@ -60,13 +62,16 @@ package tld.wvxvw.postscript {
          * with this context.
          */
         public function flush():void {
+            Console.debug("Contex flushing");
+            if (this.stroke.thickness) this.graphicData.push(this.stroke);
             if (this.solidFill) this.graphicData.push(this.solidFill);
             if (this.gradientFill) this.graphicData.push(this.gradientFill);
-            if (this.stroke.thickness) this.graphicData.push(this.stroke);
             if (this.path.commands.length) this.graphicData.push(this.path);
             if (this.solidFill || this.gradientFill)
                 this.graphicData.push(new GraphicsEndFill());
+            Console.debug("Contex drawing");
             this.graphics.drawGraphicsData(this.graphicData);
+            Console.debug("Contex done flushing", this.graphicData);
         }
 
         /**
@@ -77,6 +82,7 @@ package tld.wvxvw.postscript {
             this.solidFill = null;
             this.gradientFill = null;
             this.stroke.thickness = NaN;
+            this.stroke.fill = null;
             this.path.commands = new <int>[];
             this.path.data = new <Number>[];
             this.graphicData.splice(0, this.graphicData.length);

@@ -7,8 +7,10 @@ package tld.wvxvw.postscript.ops {
 
         public function ClosepathOp() { super(); }
 
+        public function needMoreArguments():Boolean { return false; }
+        
         /** @inheritDoc */
-        public function bind(context:Context, arg:Object):Boolean {
+        public function bind(context:Context, arg:Object):void {
             throw "should not happen";
         }
         
@@ -16,8 +18,5 @@ package tld.wvxvw.postscript.ops {
         public function invoke(context:Context):void {
 
         }
-
-        /** @inheritDoc */
-        public function get arity():uint { return 0; }
     }
 }
