@@ -2,9 +2,9 @@ package tld.wvxvw.postscript {
     
     import flash.events.IEventDispatcher;
 
-    [Event(type="flash.events.DataEvent", name="data")]
+    [Event(type="flash.events.AsyncErrorEvent", name="asyncError")]
     
-    public interface IAsyncInputStream {
+    public interface IAsyncInputStream extends IEventDispatcher {
 
         /**
          * <code>true</code> if the stream was all already read.

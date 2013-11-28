@@ -28,7 +28,8 @@ package tld.wvxvw.postscript {
         }
 
         private function loadUrl(source:URLRequest, where:Shape):EventDispatcher {
-            throw "Not implemented";
+            return new Interpreter(new UrlAsyncStream(source),
+                new Context(where));
         }
     }
 }

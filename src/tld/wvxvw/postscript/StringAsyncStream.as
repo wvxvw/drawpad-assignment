@@ -3,9 +3,14 @@ package tld.wvxvw.postscript {
     import flash.utils.Timer;
     import flash.errors.EOFError;
     import flash.events.TimerEvent;
+    import flash.events.EventDispatcher;
+    import flash.events.AsyncErrorEvent;
     import tld.wvxvw.debugging.Console;
+
+    [Event(type="flash.events.AsyncErrorEvent", name="asyncError")]
     
-    public class StringAsyncStream implements IAsyncInputStream {
+    public class StringAsyncStream extends EventDispatcher
+                                   implements IAsyncInputStream {
 
         public function get isAtEnd():Boolean {
             return this.position == this.source.length;
@@ -49,7 +54,13 @@ package tld.wvxvw.postscript {
                     this.timer.reset();
                     this.timer.start();
                 }
-            } else throw new EOFError();
+            } else {
+                var error:EOFError = new EOFError();
+                super.dispatchEvent(
+                    new AsyncErrorEvent(
+                        AsyncErrorEvent.ASYNC_ERROR,
+                        false, false, error.message, error));
+            }
         }
         
         public function readChar(callback:Function):void {
