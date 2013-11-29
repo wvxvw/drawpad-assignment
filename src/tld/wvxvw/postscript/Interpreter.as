@@ -15,7 +15,6 @@ package tld.wvxvw.postscript {
         public function get shape():Shape { return this.context.shape; }
         
         private var stream:IAsyncInputStream;
-        private var opcodes:Opcodes = new Opcodes();
         private var context:Context;
         private var reader:Reader;
         private const stack:Array = [];

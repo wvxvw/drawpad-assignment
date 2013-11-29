@@ -7,7 +7,7 @@ package tld.wvxvw.drawpad {
     import tld.wvxvw.debugging.Console;
     import tld.wvxvw.drawpad.bus.History;
     import tld.wvxvw.drawpad.bus.EventServer;
-    import tld.wvxvw.drawpad.config.Keybindings;
+    import tld.wvxvw.drawpad.config.Init;
     import tld.wvxvw.drawpad.stage.Canvas;
     import tld.wvxvw.postscript.PS;
     
@@ -15,6 +15,7 @@ package tld.wvxvw.drawpad {
 
         private var canvas:Canvas;
         private var server:EventServer;
+        private const config:Init = new Init();
         private const history:History = new History();
         private const ps:PS = new PS();
         
@@ -32,9 +33,19 @@ package tld.wvxvw.drawpad {
             Console.debug("Starting EventServer");
             this.server = new EventServer(super.stage);
             Console.debug("EventServer started");
-            this.server.loadConfig(new Keybindings().resource)
+            this.server.loadConfig(this.config)
             this.server.add(this.canvas);
             Console.debug("Application initiated");
+        }
+
+        private function load():void {
+            for each (var service:String in this.server.listServices())
+                this.ps.load(this.server.callRpcService(service))
+                    .addEventListener(Event.COMPLETE, this.completeHandler);
+        }
+
+        private function completeHandler(event:Event):void {
+            Console.debug("Application loaded", String(event.currentTarget));
         }
     }
 }

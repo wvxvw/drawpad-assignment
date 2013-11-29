@@ -4,6 +4,7 @@ package tld.wvxvw.tests {
     import flash.display.Shape;
     import tld.wvxvw.postscript.PS;
     import tld.wvxvw.postscript.Interpreter;
+    import tld.wvxvw.postscript.AsyncStringStream;
     import tld.wvxvw.debugging.Console;
 
     public class PostScriptParser {
@@ -29,7 +30,7 @@ package tld.wvxvw.tests {
         public function testSquare(where:Shape):void {
             Console.log("Square testSquare", String(where));
             try {
-                new PS().load(SQUARE, where).addEventListener(
+                new PS().load(new AsyncStringStream(SQUARE), where).addEventListener(
                     Event.COMPLETE, this.completeHandler);
                 Console.log("Square testSquare load start", String(where.stage));
             } catch (throwable:*) {

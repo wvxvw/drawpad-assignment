@@ -1,0 +1,30 @@
+{
+    "keybindings":
+    {
+        "prefix": ["C", "M", "S", "H"],
+        "bindings":
+        {
+            "C-h": "help",
+            "<left>": "moveLeft",
+            "<up>": "moveUp",
+            "<down>": "moveDown",
+            "<right>": "moveRight",
+            "C-<right>": "rotateRight",
+            "C-<left>": "rotateLeft",
+            "<down-mouse-1>": "select",
+            "<up-mouse-1>": "drop"
+        }
+    },
+    "server":
+    {
+        "location": "http://localhost:8080",
+        "method": "post",
+        "services":
+        {
+            "square": { "mandatory": [], "optional": [] },
+            "star": { "mandatory": [], "optional": [] },
+            "triangle": { "mandatory": [], "optional": [] },
+            "pentacon": { "mandatory": [], "optional": [] }
+        ]
+    }
+}
