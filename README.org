@@ -1,5 +1,5 @@
 * Rationale
-  The project will implement a limited subset of PostScript language
+  The project will implement a limited subset of Postscript language
   sufficient to render simple (two-dimensional) geometrical shapes
   
   List of operators to implement:
@@ -18,30 +18,31 @@
   
   If time allows, also implement basic control structures, words and loops.
 
-  The reason for choosing PostScript over other candidtates, which I shall discuss
+  The reason for choosing Postscript over other candidates, which I shall discuss
   shortly was that it is the oldest industry standards, has canonical text
   representation suitable for human reader, is easy to implement, can be
-  implemented iteratively, can be compiled to opcodes to reduce the file size,
+  implemented iteratively, can be compiled to op-codes to reduce the file size,
   can be trivially validated for basic syntax consistency, is backened by a standard.
 
   Below is the table of all other formats I've considered.
 
   | <8>      | <8>      | <8>      | <8>      | <8>      | <8>      |
-  | Language | Human-readable | Industry support | Easy to implement | Expressivenes | Standard |
+  | Language | Human-readable | Industry support | Easy to implement | Expressiveness | Standard |
   |----------+----------+----------+----------+----------+----------|
-  | SVG      | Yes      | Poor     | Moderate (difficult to extract a small subset) | Finite automata | Yes      |
+  | SVG      | Yes      | Poor     | Moderate (difficult to extract a small subset) | Finite automata | W3C      |
   | SWF      | No       | Single vendor | Difficult | Turing-complete | Official white-paper |
+  | PDF      | No       | Good     | Difficult | Unknown  | ISO      |
   | LaTeX    | Yes      | Average  | Difficult | Turing-complete | No       |
-  | PS       | Yes      | Good     | Easy     | Turing-complete | Official whitepaper |
+  | PS       | Yes      | Good     | Easy     | Turing-complete | Official white-paper |
   | XAML^1   | Yes      | Single vendor | Unknown  | Finite automata | Unknown  |
   | FXG^2    | Yes      | Single vendor | Easy (exists) | Finite automata | No       |
 
   1. I've not done much research on XAML graphic definition language simply because
      I don't like Microsoft products, all I know is that it is not a standard in
-     any way and no tool outside Microsoft's own toolchain is using it.
+     any way and no tool outside Microsoft's own tool-chain is using it.
   2. FXG is implemented in Flex compiler (the MXMLC), however its use is bounded
      by many additional requirement, some may impact human productivity, others
-     will impact performance. This was largerly dismissed on the grounds of
+     will impact performance. This was largely dismissed on the grounds of
      poor implementation.
      
   It was very tempting to simply use SWF format, perhaps drawing on the
@@ -49,20 +50,61 @@
   in the real world setting, however, the implementation seems too cumbersome
   for the test assignment.
 
+  PDF would be another good possibility, also, there is an existing library,
+  however, my experience with this library is that it may be buggy. Another
+  argument against PDF is that it is not human-readable. The standard version
+  of the format doesn't support scripting (only Adobe version supports
+  embedded JavaScript). The scripting in PDF is usually thought of as a
+  security hazard.
+
 * Project structure
-** PostScript module
-   - Parser
-   - Interpreter
+** Postscript module
+   - =Context=
+     This module captures the graphical environment of the Postscript 
+     command being executed.
+     
+   - =Interpreter=
+     This module reads and executes the text of the Postscript program.
+     
+   - =ErrorMessages=
+     This is a class with a bunch of error messages used when throwing
+     errors from various Postscript parts.
+     
+   - =IOpcode=
+     An interface implemented by all Postscript op-codes.
+     
+   - =IAsyncInputStream=
+     An interface for input character streams. This module provides
+     two implementations, =StringAsyncStream= is an in-memory stream
+     created from a string and =UrlAsyncStream=, an implementation based
+     on =URLStream=.
+     
+   - =PostScriptError=
+     An error thrown from various parts of Postscript module.
+     
+   - =PS=
+     The loader, the highest level of interaction a user can have with
+     Postscript module.
+     
+   - =Reader=
+     The lexer used by =Interpreter=
+     
+   - =StringAsyncStream=
+     A character input stream created from a string.
+     
+   - =UrlAsyncStream=
+     An input character stream based on =URLStream=.
    
-   The =PostScript= module will provide means of loading and parsing of
-   the =PostScript= source code. It will receive input source code of a
+   The =Postscript= module will provide means of loading and parsing of
+   the =Postscript= source code. It will receive input source code of a
    program paired with the drawing surface and emit the interpreted output
    into the surface.
 
 ** Tools
-   - Keyboard Handler
-   - Mouse Handler
-   
+   - =Keymap=
+     A container class for storing key-bindings, performs the same function
+     as its namesake in Emacs.
+     
    The =Tools= module will capture and interpret user's input into the
    executable commands.
 
@@ -73,14 +115,40 @@
    The =Stage= module will display the results of the user's commands.
 
 ** Bus
-   - History
-   - Server
+   - =History=
+     This module will store the history of user interacting with the program.
+     It will be responsible for reverting and replaying the commands.
+     
+   - =Command=
+     This module records interactive commands performed by users.
+     
+   - =EventServer=
+     This module mediates the input events to the connected clients.
+     This server implements =IServer=.
+     
+   - =IClient=
+     An interface a client must implement in order to be able to interact
+     with =IServer=.
+     
+   - =IServer=
+     An interface the server is required to implement.
+     
+   - =Server=
+     A concrete but generic implementation of =IServer=.
+     
    The =Bus= module will connect the parts and provide the interface
    to the outside world (load data, handle errors, persist data etc.)
 
 ** Effects
    The =Effects= module will provide a library of visual or sound effects
-   performed when user's action is carried out.
+   performed when user's action is carried out. Seems like there won't be
+   any in this version.
+
+** Debugging
+   - Console
+   Because it's not possible currently to debug Flash written for players 11.3
+   and later, this console will translate the logging output into JavaScript
+   console (you will need to run the program in the browser to see it).
 
 * Technical description
   As of time of this writing I don't have enough experience to try
@@ -91,7 +159,7 @@
   + Target Flash Player version: 11.8
   + SDK used for compilation: 4.11 (had to build from upstream developers
     version, there's not Linux distribution any more).
-  + Porject uses Apache Ant 1.8.4, but most likely will work with 
+  + Project uses Apache Ant 1.8.4, but most likely will work with 
     earlier versions too.
 
 * Building
@@ -106,7 +174,7 @@
   : $ git clone https://git-wip-us.apache.org/repos/asf/flex-sdk.git sdk
   I will refer to =~/flex/flex-sdk= directory as =$FLEX_HOME=, if
   you cloned the SDK elsewhere, adjust your settings accordingly.
-  Read carefuly the Flex SDK readme and prepare to build it.
+  Read carefully the Flex SDK readme and prepare to build it.
 
   It should be only necessary that you build the compiler, this can
   be can be done like so:
