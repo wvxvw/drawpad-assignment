@@ -32,13 +32,13 @@ package tld.wvxvw.drawpad.bus {
         private function init(dispatcher:EventDispatcher):void {
             this.dispatcher = dispatcher;
             this.dispatcher.addEventListener(
-                KeyboardEvent.KEY_UP, this.keyHandler);
+                KeyboardEvent.KEY_UP, this.keymap.dispatch);
             this.dispatcher.addEventListener(
-                KeyboardEvent.KEY_DOWN, this.keyHandler);
+                KeyboardEvent.KEY_DOWN, this.keymap.dispatch);
             this.dispatcher.addEventListener(
-                MouseEvent.MOUSE_DOWN, this.mousDownHandler);
+                MouseEvent.MOUSE_DOWN, this.keymap.dispatch);
             this.dispatcher.addEventListener(
-                MouseEvent.MOUSE_UP, this.mousUpHandler);
+                MouseEvent.MOUSE_UP, this.keymap.dispatch);
         }
 
         private function initRPC(serverConfig:Object):void {
@@ -100,20 +100,8 @@ package tld.wvxvw.drawpad.bus {
             return new UrlAsyncStream(request);
         }
         
-        private function keyHandler(event:KeyboardEvent):void {
-            this.keymap.dispatch(event);
-        }
-
-        private function mousUpHandler(event:MouseEvent):void {
-
-        }
-
-        private function mousDownHandler(event:MouseEvent):void {
-
-        }
-        
         public function loadConfig(config:Init):void {
-            var keys:Object = config.keybindings;
+            var keys:Object = config.keybindings();
             
             Console.debug("Loading config", keys, keys.prefix);
             for each (var key:String in keys.prefix)
@@ -121,7 +109,7 @@ package tld.wvxvw.drawpad.bus {
             Console.debug("Prefix keys defined");
             for (key in keys.bindings)
                 this.keymap.defineKey(key, this[keys.bindings[key]]);
-            this.initRPC(config.server);
+            this.initRPC(config.server());
             Console.debug("Config loaded");
         }
     }
