@@ -3,8 +3,10 @@ package tld.wvxvw.drawpad.bus {
     import flash.events.EventDispatcher;
     import flash.events.KeyboardEvent;
     import flash.events.MouseEvent;
+    import flash.events.Event;
     import flash.net.URLRequest;
     import flash.net.URLVariables;
+    import flash.utils.Dictionary;
     import tld.wvxvw.drawpad.tools.Keymap;
     import tld.wvxvw.drawpad.config.Init;
     import tld.wvxvw.debugging.Console;
@@ -14,15 +16,16 @@ package tld.wvxvw.drawpad.bus {
     public class Server implements IServer {
 
         protected var keymap:Keymap = new Keymap();
+        protected const clients:Vector.<IClient> = new <IClient>[];
         
         private var dispatcher:EventDispatcher;
-        private const clients:Vector.<IClient> = new <IClient>[];
         private const commands:Vector.<String> =
             new <String>["add", "disconnect"];
 
         private var rpcDestination:String;
         private var rpcMethod:String;
         private var rpcServices:Object;
+        private var rpcClients:Dictionary = new Dictionary();
         
         public function Server(dispatcher:EventDispatcher) {
             super();
@@ -86,18 +89,32 @@ package tld.wvxvw.drawpad.bus {
             return result;
         }
 
-        public function callRpcService(name:String,
+        public function callRpcService(client:IClient, name:String,
             ...args:Array):IAsyncInputStream {
             var request:URLRequest =
                 new URLRequest(this.rpcDestination + "/" + name);
-            request.method = this.rpcMethod;
+            request.method = this.rpcMethod.toUpperCase();
+            Console.log("Request created:", request.url, request.method);
             if (args && args.length) {
                 var variables:URLVariables = new URLVariables();
                 // This is done so because keys are allowed to repeat
                 for each (var pair:Object in args)
                     variables[pair.key] = pair.value;
+                request.data = variables;
+            } else {
+                // assholes
+                request.data = 1;
             }
-            return new UrlAsyncStream(request);
+            var stream:UrlAsyncStream = new UrlAsyncStream(request);
+            stream.addEventListener(Event.COMPLETE, this.completeHandler);
+            this.rpcClients[stream] = client;
+            return stream;
+        }
+
+        private function completeHandler(event:Event):void {
+            this.onRequest(null, event.type,
+                this.rpcClients[event.currentTarget]);
+            delete this.rpcClients[event.currentTarget];
         }
         
         public function loadConfig(config:Init):void {

@@ -43,6 +43,7 @@ package tld.wvxvw.postscript {
         }
 
         private function onReadToken(token:String):void {
+            Console.log("Interpreter onReadToken", token);
             this.reader.read(token);
             if (!this.stream.isAtEnd)
                 stream.readToken(this.onReadToken, this.delimiter);

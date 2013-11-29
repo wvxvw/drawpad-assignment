@@ -63,10 +63,10 @@ class DrawpadHandler(BaseHTTPRequestHandler):
                 '.css' : 'text/css' }
 
     def serve(self, name):
-        if name in ['square']:
+        if name in ['square', 'star', 'triangle', 'pentacon']:
             self.serve_postscript(name)
         else:
-            self.send_error(404, 'No Such Service')
+            self.send_error(404, 'No Service "%s"' % name)
 
     def serve_postscript(self, name):
         try:
@@ -105,7 +105,7 @@ class DrawpadHandler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         url = urlparse(self.path)
-        self.serve([url.path])
+        self.serve(url.path[1:])
         
 
 try:

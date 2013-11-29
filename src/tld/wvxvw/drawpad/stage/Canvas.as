@@ -9,6 +9,7 @@ package tld.wvxvw.drawpad.stage {
     import tld.wvxvw.drawpad.bus.IClient;
     import tld.wvxvw.drawpad.bus.IServer;
     import tld.wvxvw.functions.Futils;
+    import tld.wvxvw.debugging.Console;
     
     public class Canvas extends EventDispatcher implements IClient {
 
@@ -32,9 +33,10 @@ package tld.wvxvw.drawpad.stage {
             if (renderer) this.init(renderer);
         }
 
-        public function handle(response:String, ...data:Array):void {
+        public function handle(response:String, data:Array):void {
             if (this.commands.indexOf(response) > -1) {
-                if (data && data.length)
+                Console.log("Client received response", response, data);
+                if (data.length)
                     (this[response] as Function).apply(this, data);
                 else this[response]();
             }

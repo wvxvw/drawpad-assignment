@@ -10,6 +10,7 @@ package tld.wvxvw.drawpad {
     import tld.wvxvw.drawpad.config.Init;
     import tld.wvxvw.drawpad.stage.Canvas;
     import tld.wvxvw.postscript.PS;
+    import tld.wvxvw.postscript.Interpreter;
     
     public class Application extends Sprite {
 
@@ -36,16 +37,19 @@ package tld.wvxvw.drawpad {
             this.server.loadConfig(this.config)
             this.server.add(this.canvas);
             Console.debug("Application initiated");
+            this.load();
         }
 
         private function load():void {
             for each (var service:String in this.server.listServices())
-                this.ps.load(this.server.callRpcService(service))
+                this.ps.load(this.server.callRpcService(this.canvas, service))
                     .addEventListener(Event.COMPLETE, this.completeHandler);
         }
 
         private function completeHandler(event:Event):void {
-            Console.debug("Application loaded", String(event.currentTarget));
+            var interpreter:Interpreter = event.currentTarget as Interpreter;
+            this.server.place(interpreter.shape);
+            Console.debug("Shape loaded", String(event.currentTarget));
         }
     }
 }

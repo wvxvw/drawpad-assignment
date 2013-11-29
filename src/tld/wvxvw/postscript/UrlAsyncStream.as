@@ -57,6 +57,7 @@ package tld.wvxvw.postscript {
         }
         
         private function startReading(callback:Function, handler:Function):void {
+            Console.debug("UrlAsyncStream startReading", this.isAtEnd);
             if (!this.isAtEnd) {
                 this.stream = new URLStream();
                 this.stream.addEventListener(Event.COMPLETE, this.completeHandler);
@@ -74,6 +75,7 @@ package tld.wvxvw.postscript {
                         AsyncErrorEvent.ASYNC_ERROR,
                         false, false, error.message, error));
             }
+            Console.debug("UrlAsyncStream startReading done");
         }
         
         public function readChar(callback:Function):void {
@@ -109,10 +111,12 @@ package tld.wvxvw.postscript {
         }
         
         private function tokenHandler(event:ProgressEvent = null):void {
-            var result:Object =
-                this.lastResult || this.delimiter.exec(this.bufferString), match:String;
+            var result:Object, match:String;
+            
+            if (!this.bufferString) this.fillBuffer();
+            result = this.lastResult || this.delimiter.exec(this.bufferString),
 
-            Console.log("result:", result);
+            Console.log("result:", result, this.bufferString);
             
         }
     }

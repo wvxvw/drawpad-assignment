@@ -64,7 +64,7 @@ package tld.wvxvw.drawpad.tools {
                     collected.push(this.translate(keyEvent));
                     this.addToCord(collected);
                 } else if (keyEvent.type == KeyboardEvent.KEY_UP) {
-                    this.doDispatch();
+                    this.doDispatch(event);
                 }
                 // not sure what to do with keypress yet.
             } else if (event is MouseEvent) {
@@ -76,13 +76,13 @@ package tld.wvxvw.drawpad.tools {
                     if (mouseEvent.shiftKey) collected.push("S");
                     collected.push("<down-mouse-1>");
                     this.addToCord(collected);
-                    this.doDispatch();
+                    this.doDispatch(event);
                 } else if (mouseEvent.type == MouseEvent.MOUSE_UP) {
                     // Not sure what's the point of modifier keys
                     // on a key-up event...
                     collected.push("<up-mouse-1>");
                     this.addToCord(collected);
-                    this.doDispatch();
+                    this.doDispatch(event);
                 }
                 // there's a lot of other mouse events, which
                 // I don't know how to treat yet.
@@ -90,14 +90,14 @@ package tld.wvxvw.drawpad.tools {
             Console.debug("Current combo:", this.currentCombo());
         }
 
-        private function doDispatch():void {
+        private function doDispatch(event:Event):void {
             // We must take some action, either wait for more input
             // (because the user typed a prefix key)
             // or act now (because we have a matched handler).
             var combo:String = this.currentCombo();
             if (!(combo in this.prefixKeys)) {
                 if (combo in this.bindings) {
-                    this.bindings[combo]();
+                    this.bindings[combo](event);
                 } else if (combo)
                 Console.error("Key", combo, "has no handler");
                 // Don't trigger error for empty bindings
