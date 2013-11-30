@@ -19,7 +19,7 @@ package tld.wvxvw.postscript.ops {
         
         /** @inheritDoc */
         public function invoke(context:Context):void {
-            context.position.offset(this.args[0], this.args[1]);
+            context.position.offset(this.args[1], -this.args[0]);
             context.path.lineTo(context.position.x, context.position.y);
         }
     }

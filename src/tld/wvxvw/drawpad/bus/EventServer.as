@@ -105,11 +105,12 @@ package tld.wvxvw.drawpad.bus {
         }
 
         private function tell(request:String, data:Array = null):void {
+            Console.debug("telling clients:", super.clients.length);
             for each (var client:IClient in super.clients) {
                 try { client.handle(request, data); }
                 catch (error:*) {
                     Console.error("Client", String(client), "failed request",
-                        request, "with arguments", data);
+                        request, "with arguments", String(data), String(error));
                 }
             }
         }

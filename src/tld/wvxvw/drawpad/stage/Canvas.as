@@ -1,147 +1,72 @@
 package tld.wvxvw.drawpad.stage {
 
     import flash.display.DisplayObjectContainer;
-    import flash.display.DisplayObject;
-    import flash.events.EventDispatcher;
+    import flash.display.Shape;
+    import flash.events.Event;
     import flash.geom.Matrix;
     import tld.wvxvw.drawpad.bus.History;
-    import tld.wvxvw.drawpad.bus.Command;
-    import tld.wvxvw.drawpad.bus.IClient;
-    import tld.wvxvw.drawpad.bus.IServer;
-    import tld.wvxvw.functions.Futils;
     import tld.wvxvw.debugging.Console;
     
-    public class Canvas extends EventDispatcher implements IClient {
+    public class Canvas extends GraphicClient {
 
-        public function set server(value:IServer):void {
-            this.eventServer = value;
-        }
-        
-        public var renderer:DisplayObjectContainer;
-
-        private const children:Vector.<DisplayObject> = new <DisplayObject>[];
-        private const commands:Vector.<String> =
-            new <String>["yank", "place", "move", "select", "unselect"];
-        private var selection:DisplayObject;
-        private var history:History;
-        private var eventServer:IServer;
+        private var picked:Shape;
         
         public function Canvas(history:History,
             renderer:DisplayObjectContainer = null) {
-            super();
-            this.history = history;
-            if (renderer) this.init(renderer);
+            super(history, renderer);
+            super.commands.push("pick", "drop");
         }
 
-        public function handle(response:String, data:Array):void {
-            if (this.commands.indexOf(response) > -1) {
-                Console.log("Client received response", response, data);
-                if (data.length)
-                    (this[response] as Function).apply(this, data);
-                else this[response]();
-            }
+        public function pick(shape:Shape):void {
+            this.doInteractiveCommand(this.pickCommand(shape));
+        }
+
+        public function drop():void {
+            this.doInteractiveCommand(this.dropCommand());
         }
         
-        private function init(renderer:DisplayObjectContainer):void {
-            renderer.mouseChildren = false;
-        }
-
-        public function yank(child:DisplayObject):void {
-            this.doInteractiveCommand(this.yankCommand(child));
-        }
-
-        public function place(child:DisplayObject):void {
-            this.doInteractiveCommand(this.placeCommand(child));
-        }
-
-        public function select(x:int, y:int):void {
-            this.doInteractiveCommand(this.selectCommand(x, y));
-        }
-
-        public function unselect():void {
-            this.doInteractiveCommand(this.unselectCommand());
-        }
-
-        public function move(x:int, y:int):void {
-            this.doInteractiveCommand(this.moveCommand(x, y));
-        }
-
-        private function doInteractiveCommand(action:Vector.<Function>):void {
-            this.history.push(
-                new Command(Futils.bind(action[0], this),
-                    Futils.bind(action[1], this)));
-        }
-        
-        private function placeCommand(child:DisplayObject):Vector.<Function> {
+        protected function pickCommand(shape:Shape):Vector.<Function> {
             return new <Function>[
                 function ():void {
-                    this.history.inhibit = true;
-                    this.yank(child);
-                    this.history.inhibit = false;
-                    this.children.unshift(child);
-                    this.renderer.addChild(child);
+                    Console.warn("picking");
+                    this.picked = shape;
+                    this.renderer.stage.addEventListener(
+                        Event.ENTER_FRAME, this.enterFrameHandler);
+                    this.renderer.stage.addChild(shape);
                 },
                 function ():void {
-                    this.history.inhibit = true;
-                    this.yank(child);
-                    this.history.inhibit = false;
+                    if (this.picked) {
+                        if (this.picked.parent)
+                            picked.parent.removeChild(this.picked);
+                        this.renderer.stage.removeEventListener(
+                            Event.ENTER_FRAME, this.enterFrameHandler);
+                        this.picked = null;
+                    }
                 }];
         }
-
-        private function yankCommand(child:DisplayObject):Vector.<Function> {
-            var index:int = -1;
-            return new <Function>[
-                function ():void {
-                    index = this.children.indexOf(child);
-                    if (index > -1) this.children.splice(index, 1);
-                },
-                function ():void {
-                    if (index > -1) this.children.splice(index, 0, 1);
-                }
-            ];
-        }
-
-        private function selectCommand(x:int, y:int):Vector.<Function> {
-            var selected:DisplayObject, lastSelected:DisplayObject = this.selection;
-            // This is easier then to use getObjectsUnderPoint()
-            return new <Function>[
-                function ():void {
-                    for each (var child:DisplayObject in this.children) {
-                        if (child.getBounds(this.renderer).contains(x, y)) {
-                            selected = child;
-                            this.place(child);
-                            break;
-                        }
-                    }
-                    this.selection = selected;
-                },
-                function ():void { this.selection = lastSelected; }];
-        }
-
-        private function unselectCommand():Vector.<Function> {
-            var selection:DisplayObject = this.selection;
-            return new <Function>[
-                function ():void { this.selection = null; },
-                function ():void { this.selection = selection; }];
-        }
         
-        private function moveCommand(x:int, y:int):Vector.<Function> {
-            var oldMatrix:Matrix, selection:DisplayObject = this.selection;
+        protected function dropCommand():Vector.<Function> {
             return new <Function>[
                 function ():void {
-                    if (selection) {
-                        // Using matrix to avoid unnecessary screen update
-                        // created by two separate movements which would
-                        // be performed if we assigned x and y separately
-                        oldMatrix = selection.transform.matrix;
-                        var matrix:Matrix = oldMatrix.clone();
-                        matrix.translate(x, y);
-                        this.selection.transform.matrix = matrix;
+                    Console.warn("dropping");
+                    if (this.picked) {
+                        picked.parent.removeChild(this.picked);
+                        this.renderer.stage.removeEventListener(
+                            Event.ENTER_FRAME, this.enterFrameHandler);
+                        this.place(this.picked);
+                        this.picked = null;
                     }
                 },
                 function ():void {
-                    if (oldMatrix) selection.transform.matrix = oldMatrix;
+                    // not sure what to do here yet
                 }];
+        }
+
+        private function enterFrameHandler(event:Event):void {
+            var matrix:Matrix = this.picked.transform.matrix;
+            matrix.tx = this.picked.stage.mouseX;
+            matrix.ty = this.picked.stage.mouseY;
+            this.picked.transform.matrix = matrix;
         }
     }
 }

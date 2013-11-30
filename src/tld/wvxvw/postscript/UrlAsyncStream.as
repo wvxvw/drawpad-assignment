@@ -20,7 +20,7 @@ package tld.wvxvw.postscript {
                                 implements IAsyncInputStream {
 
         public function get isAtEnd():Boolean {
-            return this.endTester();
+            return this.completed && !this.buffer;
         }
 
         public function get isAtStart():Boolean {
@@ -34,10 +34,10 @@ package tld.wvxvw.postscript {
         private var delimiter:RegExp;
         private var lastResult:Object;
         private var stream:URLStream;
-        private const buffer:ByteArray = new ByteArray();
+        private var buffer:String = "";
         private var bufferSize:uint = 1204;
-        private var bufferString:String;
         private var position:uint;
+        private var completed:Boolean;
         
         public function UrlAsyncStream(request:URLRequest) {
             super();
@@ -46,18 +46,14 @@ package tld.wvxvw.postscript {
         }
 
         private function fillBuffer():void {
-            this.buffer.position = this.buffer.bytesAvailable;
-            this.buffer.writeUTFBytes(
+            this.buffer +=
                 this.stream.readUTFBytes(
-                    Math.min(this.stream.bytesAvailable,
-                        this.bufferSize - this.buffer.position)));
-            this.buffer.position = 0;
-            this.bufferString = this.buffer.readUTFBytes(this.buffer.length);
-            this.buffer.position = 0;
+                    Math.min(this.stream.bytesAvailable, this.bufferSize));
         }
         
         private function startReading(callback:Function, handler:Function):void {
             Console.debug("UrlAsyncStream startReading", this.isAtEnd);
+            this.callback = callback;
             if (!this.isAtEnd) {
                 this.stream = new URLStream();
                 this.stream.addEventListener(Event.COMPLETE, this.completeHandler);
@@ -93,31 +89,53 @@ package tld.wvxvw.postscript {
         }
 
         private function completeHandler(event:Event):void {
-
+            this.completed = true;
         }
 
         private function charHandler(event:ProgressEvent):void {
-            this.callback(this.bufferString.charAt(this.position++));
+            var char:String = this.buffer.charAt();
+            this.position++;
+            this.buffer = this.buffer.substr(1);
+            this.callback(char);
         }
 
-        protected function endTester():Boolean {
-            // This should test for the null byte, is meant to be overriden
-            // if someone wants the test to be performed different, however,
-            // this test must take into account that after the stream was
-            // disconnected, it must be at the end.
-            return this.stream &&
-                (this.buffer[Math.max(this.buffer.position - 1, 0)] == 0 ||
-                !this.stream.connected);
+        private function lastJunkBytes():Boolean {
+            var char:String = this.stream.readUTFBytes(1);
+            this.buffer += char;
+            return Boolean(char);
         }
         
-        private function tokenHandler(event:ProgressEvent = null):void {
-            var result:Object, match:String;
+        private function tokenHandler(event:ProgressEvent = null, advance:uint = 0):void {
+            var result:Object, match:String, token:String,
+                lastIndex:int = this.delimiter.lastIndex - advance;
             
-            if (!this.bufferString) this.fillBuffer();
-            result = this.lastResult || this.delimiter.exec(this.bufferString),
-
-            Console.log("result:", result, this.bufferString);
+            if (!this.buffer) this.fillBuffer();
+            result = this.delimiter.exec(this.buffer);
             
+            Console.log("result:", result, this.buffer);
+            if (result) {
+                // If we made no progress, advance one character, and try again
+                if (lastIndex == this.delimiter.lastIndex) {
+                    this.delimiter.lastIndex++;
+                    this.tokenHandler(event, advance + 1);
+                    return;
+                }
+                // We found next delimiter and we have enough space to
+                // read all the text up to it
+                match = result[0];
+                token = this.buffer.substring(0, this.delimiter.lastIndex - match.length);
+                Console.log("Match:", "|" + match + "|", "token", "|" + token + "|");
+                if (this.buffer == token + match) this.buffer = "";
+                else this.buffer = this.buffer.substr(token.length + match.length);
+                this.delimiter.lastIndex = 0;
+                this.callback(token);
+            } else if (this.completed) {
+                this.callback(this.buffer);
+                this.buffer = "";
+            } else if (this.stream.bytesAvailable && !this.lastJunkBytes()) {
+                this.fillBuffer();
+                this.tokenHandler(event);
+            }
         }
     }
 }

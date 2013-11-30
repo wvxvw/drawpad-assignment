@@ -20,7 +20,7 @@ package tld.wvxvw.drawpad.bus {
         
         private var dispatcher:EventDispatcher;
         private const commands:Vector.<String> =
-            new <String>["add", "disconnect"];
+            new <String>["add", "disconnect", "echo", "fail"];
 
         private var rpcDestination:String;
         private var rpcMethod:String;
@@ -52,7 +52,21 @@ package tld.wvxvw.drawpad.bus {
 
         public function add(client:IClient):void {
             var index:int = this.clients.indexOf(client);
-            if (index < 0) this.clients.push(client);
+            if (index < 0) {
+                client.server = this;
+                this.clients.push(client);
+            }
+            Console.debug("total clients:", this.clients.length);
+        }
+
+        public function echo(command:String, ...args:Array):void {
+            for each (var client:IClient in this.clients) {
+                client.handle(command, args);
+            }
+        }
+
+        public function fail(client:IClient, command:String, ...args:Array):void {
+            Console.error("Client:", String(client), "failed command:", command);
         }
 
         public function disconnect(client:IClient):void {
