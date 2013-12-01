@@ -12,6 +12,8 @@ package tld.wvxvw.drawpad.stage {
     public class Canvas extends GraphicClient {
 
         private var picked:Shape;
+        private var pickedTx:Number;
+        private var pickedTy:Number;
         
         public function Canvas(history:History,
             renderer:DisplayObjectContainer = null) {
@@ -19,8 +21,8 @@ package tld.wvxvw.drawpad.stage {
             super.commands.push("pick", "drop", "rotate");
         }
 
-        public function pick(shape:Shape):void {
-            this.doInteractiveCommand(this.pickCommand(shape));
+        public function pick(shape:Shape, x:int, y:int):void {
+            this.doInteractiveCommand(this.pickCommand(shape, x, y));
         }
 
         public function drop(x:int, y:int):void {
@@ -57,7 +59,7 @@ package tld.wvxvw.drawpad.stage {
                 }];
         }
         
-        protected function pickCommand(shape:Shape):Vector.<Function> {
+        protected function pickCommand(shape:Shape, x:int, y:int):Vector.<Function> {
             return new <Function>[
                 function ():void {
                     Console.warn("picking");
@@ -65,6 +67,10 @@ package tld.wvxvw.drawpad.stage {
                     this.renderer.stage.addEventListener(
                         Event.ENTER_FRAME, this.enterFrameHandler);
                     this.renderer.stage.addChild(shape);
+                    this.pickedTx = x;
+                    this.pickedTy = y;
+                    Console.warn("picked", this.renderer.stage.mouseX, x,
+                        this.renderer.stage.mouseY, y);
                 },
                 function ():void {
                     if (this.picked) {
@@ -89,7 +95,7 @@ package tld.wvxvw.drawpad.stage {
                             // We landed inside our renderer, so add us
                             this.place(this.picked);
                         } 
-                        // Else we are outside the rendere, discard us
+                        // Else we are outside the renderer, discard us
                         this.picked = null;
                     }
                 },
@@ -103,14 +109,17 @@ package tld.wvxvw.drawpad.stage {
             // This is easier then to use getObjectsUnderPoint()
             return new <Function>[
                 function ():void {
+                    var rect:Rectangle;
                     for each (var child:DisplayObject in this.children) {
-                        if (child.getBounds(this.renderer.stage).contains(x, y)) {
+                        rect = child.getBounds(this.renderer.stage);
+                        if (rect.contains(x, y)) {
                             selected = child;
                             break;
                         }
                     }
                     this.selection = selected;
-                    if (this.selection) this.pick(selection);
+                    if (this.selection)
+                        this.pick(selection, selection.mouseX, selection.mouseY);
                 },
                 function ():void {
                     this.selection = lastSelected;
@@ -119,8 +128,8 @@ package tld.wvxvw.drawpad.stage {
         
         private function enterFrameHandler(event:Event):void {
             var matrix:Matrix = this.picked.transform.matrix;
-            matrix.tx = this.picked.stage.mouseX;
-            matrix.ty = this.picked.stage.mouseY;
+            matrix.tx = this.picked.stage.mouseX - this.pickedTx;
+            matrix.ty = this.picked.stage.mouseY - this.pickedTy;
             this.picked.transform.matrix = matrix;
         }
     }

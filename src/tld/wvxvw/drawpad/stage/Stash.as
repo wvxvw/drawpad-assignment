@@ -103,15 +103,21 @@ package tld.wvxvw.drawpad.stage {
             // This is easier then to use getObjectsUnderPoint()
             return new <Function>[
                 function ():void {
+                    var rect:Rectangle, matrix:Matrix;
                     for each (var child:DisplayObject in this.children) {
-                        if (child.getBounds(this.renderer.stage).contains(x, y)) {
+                        rect = child.getBounds(this.renderer.stage);
+                        if (rect.contains(x, y)) {
                             selected = child;
                             Console.debug("found selection, will duplicate it",
                                 child is Shape, String(this));
                             copy = new Shape();
                             copy.graphics.copyFrom((child as Shape).graphics);
+                            matrix = child.transform.matrix;
+                            matrix.tx = this.renderer.stage.mouseX - child.mouseX;
+                            matrix.ty = this.renderer.stage.mouseY - child.mouseY;
+                            copy.transform.matrix = matrix;
                             Console.debug("graphics copied", copy.width, copy.height);
-                            this.server.request(this, "echo", "pick", copy);
+                            this.server.request(this, "echo", "pick", copy, child.mouseX, child.mouseY);
                             break;
                         }
                     }
