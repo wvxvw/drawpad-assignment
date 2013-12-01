@@ -126,12 +126,12 @@ package tld.wvxvw.drawpad.stage {
                 }];
         }
 
-        protected override function unselectCommand():Vector.<Function> {
+        protected override function unselectCommand(x:int, y:int):Vector.<Function> {
             var selection:DisplayObject = this.selection;
             return new <Function>[
                 function ():void {
                     this.selection = null;
-                    this.server.request(this, "echo", "drop");
+                    this.server.request(this, "echo", "drop", x, y);
                 },
                 function ():void { this.selection = selection; }];
         }

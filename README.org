@@ -1,3 +1,11 @@
+* Cool Stuff
+  I've recorded a video to make it simpler for you to understand
+  what this project is doing :)
+  #+BEGIN_HTML
+  <iframe id="ytplayer" type="text/html" width="640" height="390"
+          src="http://youtu.be/Ne8dEZ4QpOc" frameborder="0"/>
+  #+END_HTML
+
 * Rationale
   The project will implement a limited subset of Postscript language
   sufficient to render simple (two-dimensional) geometrical shapes

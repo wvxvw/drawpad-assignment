@@ -1,17 +1,10 @@
 #!/usr/bin/python
 
-# Nothe, this module cannot be installed using pip
-# you may need to build it on your own. It also depends on
-# setuptools, so you need to make sure you have that installed
-# http://sourceforge.net/projects/mysql-python/
-import MySQLdb
-
 # This should be available with the default Python install
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 from optparse import OptionParser
 import getpass
-import re
-from os import path, curdir
+from os import path
 from urlparse import urlparse, parse_qs
 
 # This is the example HTTP server, it communicates to the MySQL
@@ -49,7 +42,7 @@ parser.add_option(
     help = '''The database to connect to.
 Defaults to "example"''')
 
-(options, args) = parser.parse_args()
+options, args = parser.parse_args()
 
 class DrawpadHandler(BaseHTTPRequestHandler):
 

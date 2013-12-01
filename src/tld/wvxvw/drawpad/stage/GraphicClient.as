@@ -73,9 +73,9 @@ package tld.wvxvw.drawpad.stage {
             }
         }
 
-        public function unselect():void {
+        public function unselect(x:int, y:int):void {
             if (this.ourSelection)
-                this.doInteractiveCommand(this.unselectCommand());
+                this.doInteractiveCommand(this.unselectCommand(x, y));
         }
 
         public function move(x:int, y:int):void {
@@ -135,7 +135,7 @@ package tld.wvxvw.drawpad.stage {
                 function ():void { this.selection = lastSelected; }];
         }
 
-        protected function unselectCommand():Vector.<Function> {
+        protected function unselectCommand(x:int, y:int):Vector.<Function> {
             var selection:DisplayObject = this.selection;
             return new <Function>[
                 function ():void { this.selection = null; },

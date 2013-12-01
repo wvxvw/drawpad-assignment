@@ -32,57 +32,43 @@ package tld.wvxvw.drawpad.bus {
         
         public function moveLeft(event:Event = null):void {
             Console.log("moving left");
-            this.position.x = 
-                (event is MouseEvent) ?
-                    (event as MouseEvent).stageX - this.position.x :
-                    this.position.x - this.step;
-            this.tell("move", [this.position.x, 0]);
+            this.tell("move", [-this.step, 0]);
         }
 
         public function moveUp(event:Event = null):void {
             Console.log("moving up");
-            this.position.y =
-                (event is MouseEvent) ?
-                    (event as MouseEvent).stageY - this.position.y :
-                    this.position.y - this.step;
-            this.tell("move", [0, this.position.y]);
+            this.tell("move", [0, -this.step]);
         }
 
         public function moveDown(event:Event = null):void {
             Console.log("moving down");
-            this.position.y =
-                (event is MouseEvent) ?
-                    (event as MouseEvent).stageY - this.position.y :
-                    this.position.y + this.step;
-            this.tell("move", [0, this.position.y]);
+            this.tell("move", [0, this.step]);
         }
 
         public function moveRight(event:Event = null):void {
             Console.log("moving right");
-            this.position.x = 
-                (event is MouseEvent) ?
-                    (event as MouseEvent).stageX - this.position.x :
-                    this.position.x + this.step;
-            this.tell("move", [this.position.x, 0]);
+            this.tell("move", [this.step, 0]);
         }
 
         public function move(event:Event = null):void {
             Console.log("selecting");
+            var deltaX:int, deltaY:int;
             if (event is MouseEvent) {
-                this.position.x = (event as MouseEvent).stageX;
-                this.position.y = (event as MouseEvent).stageY;
+                deltaX =  (event as MouseEvent).stageX - this.position.x;
+                deltaY = (event as MouseEvent).stageY - this.position.y;
             }
-            this.tell("move", [this.position.x, this.position.y]);
+            this.position.offset(deltaX, deltaY);
+            this.tell("move", [deltaX, deltaY]);
         }
         
         public function rotateLeft(event:Event = null):void {
             Console.log("rotating left");
-            tell("rotate", [-1, this.step]);
+            tell("rotate", [-this.step]);
         }
 
         public function rotateRight(event:Event = null):void {
             Console.log("rotating right");
-            this.tell("rotate", [1, this.step]);
+            this.tell("rotate", [this.step]);
         }
 
         public function select(event:Event = null):void {
@@ -96,7 +82,11 @@ package tld.wvxvw.drawpad.bus {
 
         public function drop(event:Event = null):void {
             Console.log("dropping");
-            this.tell("drop");
+            if (event is MouseEvent) {
+                this.position.x = (event as MouseEvent).stageX;
+                this.position.y = (event as MouseEvent).stageY;
+            }
+            this.tell("drop", [this.position.x, this.position.y]);
         }
         
         protected override function onRequest(client:IClient,
