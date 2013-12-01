@@ -2,6 +2,10 @@
   I've recorded a [[http://youtu.be/Ne8dEZ4QpOc][video]] to make it simpler for you to understand
   what this project is doing :)
 
+#+BEGIN_HTML
+  <a href="./tpl/youtube-thumbnail.png"><img src="http://youtu.be/Ne8dEZ4QpOc"></a>
+#+END_HTML
+
 * Rationale
   The project will implement a limited subset of Postscript language
   sufficient to render simple (two-dimensional) geometrical shapes
