@@ -2,7 +2,7 @@
   I've recorded a [[http://youtu.be/Ne8dEZ4QpOc][video]] to make it simpler for you to understand
   what this project is doing :)
 
-  [[file:./tpl/youtube-thumbnail.png][http://youtu.be/Ne8dEZ4QpOc]]
+  [[http://youtu.be/Ne8dEZ4QpOc][{file:./tpl/youtube-thumbnail.png}]]
 
 * Rationale
   The project will implement a limited subset of Postscript language
