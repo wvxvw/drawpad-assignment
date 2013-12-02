@@ -1,0 +1,720 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>README</title>
+<!-- 2013-12-02 Mon 14:35 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Oleg Sivokon" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="./solarized-dark.min.css" />
+
+<script type="text/javascript" src="./org-info.min.js">
+/**
+ *
+ * @source: ./org-info.min.js
+ *
+ * @licstart  The following is the entire license notice for the
+ *  JavaScript code in ./org-info.min.js.
+ *
+ * Copyright (C) 2012-2013  Sebastian Rose
+ *
+ *
+ * The JavaScript code in this tag is free software: you can
+ * redistribute it and/or modify it under the terms of the GNU
+ * General Public License (GNU GPL) as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option)
+ * any later version.  The code is distributed WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+ *
+ * As additional permission under GNU GPL version 3 section 7, you
+ * may distribute non-source (e.g., minimized or compacted) forms of
+ * that code without the copy of the GNU GPL normally required by
+ * section 4, provided you include this license notice and a URL
+ * through which recipients can access the Corresponding Source.
+ *
+ * @licend  The above is the entire license notice
+ * for the JavaScript code in ./org-info.min.js.
+ *
+ */
+</script>
+
+<script type="text/javascript">
+
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+
+<!--/*--><![CDATA[/*><!--*/
+org_html_manager.set("TOC_DEPTH", "3");
+org_html_manager.set("LINK_HOME", "");
+org_html_manager.set("LINK_UP", "");
+org_html_manager.set("LOCAL_TOC", "1");
+org_html_manager.set("VIEW_BUTTONS", "0");
+org_html_manager.set("MOUSE_HINT", "underline");
+org_html_manager.set("FIXED_TOC", "0");
+org_html_manager.set("TOC", "1");
+org_html_manager.set("VIEW", "1");
+org_html_manager.setup();  // activate after the parameters are set
+/*]]>*///-->
+</script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012  Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">README</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">Cool Stuff</a></li>
+<li><a href="#sec-2">Rationale</a></li>
+<li><a href="#sec-3">Project structure</a>
+<ul>
+<li><a href="#sec-3-1">Postscript module</a></li>
+<li><a href="#sec-3-2">Tools</a></li>
+<li><a href="#sec-3-3">Stage</a></li>
+<li><a href="#sec-3-4">Bus</a></li>
+<li><a href="#sec-3-5">Effects</a></li>
+<li><a href="#sec-3-6">Debugging</a></li>
+</ul>
+</li>
+<li><a href="#sec-4">Technical description</a></li>
+<li><a href="#sec-5">Project schema (UML)</a></li>
+<li><a href="#sec-6">Building</a></li>
+<li><a href="#sec-7">Testing</a></li>
+<li><a href="#sec-8">Running</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Cool Stuff</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+I've recorded a <a href="http://youtu.be/Ne8dEZ4QpOc">video</a> to make it simpler for you to understand
+what this project is doing :)
+</p>
+
+
+<div class="figure">
+<p><a href="http://youtu.be/Ne8dEZ4QpOc"><img src="./tpl/youtube-thumbnail.png" alt="youtube-thumbnail.png" /></a>
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Rationale</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+The project will implement a limited subset of Postscript language
+sufficient to render simple (two-dimensional) geometrical shapes
+</p>
+
+<p>
+List of operators to implement:
+</p>
+<ul class="org-ul">
+<li><code>closepath</code>
+</li>
+<li><code>lineto</code>
+</li>
+<li><code>moveto</code>
+</li>
+<li><code>newpath</code>
+</li>
+<li><code>rlineto</code>
+</li>
+<li><code>rmoveto</code>
+</li>
+<li><code>fill</code>
+</li>
+<li><code>setlinewidth</code>
+</li>
+<li><code>stroke</code>
+</li>
+<li><code>showpage</code>
+</li>
+<li><code>setrgbcolor</code> 
+    <i>not implementing</i> <code>setgray</code> <i>in an effort to reduce the workload</i>
+</li>
+</ul>
+
+<p>
+If time allows, also implement basic control structures, words and loops.
+</p>
+
+<p>
+The reason for choosing Postscript over other candidates, which I shall discuss
+shortly was that it is the oldest industry standards, has canonical text
+representation suitable for human reader, is easy to implement, can be
+implemented iteratively, can be compiled to op-codes to reduce the file size,
+can be trivially validated for basic syntax consistency, is backened by a standard.
+</p>
+
+<p>
+Below is the table of all other formats I've considered.
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Language</th>
+<th scope="col" class="left">Human-readable</th>
+<th scope="col" class="left">Industry support</th>
+<th scope="col" class="left">Easy to implement</th>
+<th scope="col" class="left">Expressiveness</th>
+<th scope="col" class="left">Standard</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">SVG</td>
+<td class="left">Yes</td>
+<td class="left">Poor</td>
+<td class="left">Moderate (difficult to extract a small subset)</td>
+<td class="left">Finite automata</td>
+<td class="left">W3C</td>
+</tr>
+
+<tr>
+<td class="left">SWF</td>
+<td class="left">No</td>
+<td class="left">Single vendor</td>
+<td class="left">Difficult</td>
+<td class="left">Turing-complete</td>
+<td class="left">Official white-paper</td>
+</tr>
+
+<tr>
+<td class="left">PDF</td>
+<td class="left">No</td>
+<td class="left">Good</td>
+<td class="left">Difficult</td>
+<td class="left">Unknown</td>
+<td class="left">ISO</td>
+</tr>
+
+<tr>
+<td class="left">LaTeX</td>
+<td class="left">Yes</td>
+<td class="left">Average</td>
+<td class="left">Difficult</td>
+<td class="left">Turing-complete</td>
+<td class="left">No</td>
+</tr>
+
+<tr>
+<td class="left">PS</td>
+<td class="left">Yes</td>
+<td class="left">Good</td>
+<td class="left">Easy</td>
+<td class="left">Turing-complete</td>
+<td class="left">Official white-paper</td>
+</tr>
+
+<tr>
+<td class="left">XAML<sup>1</sup></td>
+<td class="left">Yes</td>
+<td class="left">Single vendor</td>
+<td class="left">Unknown</td>
+<td class="left">Finite automata</td>
+<td class="left">Unknown</td>
+</tr>
+
+<tr>
+<td class="left">FXG<sup>2</sup></td>
+<td class="left">Yes</td>
+<td class="left">Single vendor</td>
+<td class="left">Easy (exists)</td>
+<td class="left">Finite automata</td>
+<td class="left">No</td>
+</tr>
+</tbody>
+</table>
+
+<ol class="org-ol">
+<li>I've not done much research on XAML graphic definition language simply because
+I don't like Microsoft products, all I know is that it is not a standard in
+any way and no tool outside Microsoft's own tool-chain is using it.
+</li>
+<li>FXG is implemented in Flex compiler (the MXMLC), however its use is bounded
+by many additional requirement, some may impact human productivity, others
+will impact performance. This was largely dismissed on the grounds of
+poor implementation.
+</li>
+</ol>
+
+<p>
+It was very tempting to simply use SWF format, perhaps drawing on the
+work previously done by <code>hxswfml</code> project. I would prefer this solution
+in the real world setting, however, the implementation seems too cumbersome
+for the test assignment.
+</p>
+
+<p>
+PDF would be another good possibility, also, there is an existing library,
+however, my experience with this library is that it may be buggy. Another
+argument against PDF is that it is not human-readable. The standard version
+of the format doesn't support scripting (only Adobe version supports
+embedded JavaScript). The scripting in PDF is usually thought of as a
+security hazard.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Project structure</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> Postscript module</h3>
+<div class="outline-text-3" id="text-3-1">
+<ul class="org-ul">
+<li><code>Context</code>
+This module captures the graphical environment of the Postscript 
+command being executed.
+</li>
+
+<li><code>Interpreter</code>
+This module reads and executes the text of the Postscript program.
+</li>
+
+<li><code>ErrorMessages</code>
+This is a class with a bunch of error messages used when throwing
+errors from various Postscript parts.
+</li>
+
+<li><code>IOpcode</code>
+An interface implemented by all Postscript op-codes.
+</li>
+
+<li><code>IAsyncInputStream</code>
+An interface for input character streams. This module provides
+two implementations, <code>StringAsyncStream</code> is an in-memory stream
+created from a string and <code>UrlAsyncStream</code>, an implementation based
+on <code>URLStream</code>.
+</li>
+
+<li><code>PostScriptError</code>
+An error thrown from various parts of Postscript module.
+</li>
+
+<li><code>PS</code>
+The loader, the highest level of interaction a user can have with
+Postscript module.
+</li>
+
+<li><code>Reader</code>
+The lexer used by <code>Interpreter</code>
+</li>
+
+<li><code>StringAsyncStream</code>
+A character input stream created from a string.
+</li>
+
+<li><code>UrlAsyncStream</code>
+An input character stream based on <code>URLStream</code>.
+</li>
+</ul>
+
+<p>
+The <code>Postscript</code> module will provide means of loading and parsing of
+the <code>Postscript</code> source code. It will receive input source code of a
+program paired with the drawing surface and emit the interpreted output
+into the surface.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> Tools</h3>
+<div class="outline-text-3" id="text-3-2">
+<ul class="org-ul">
+<li><code>Keymap</code>
+A container class for storing key-bindings, performs the same function
+as its namesake in Emacs.
+</li>
+</ul>
+
+<p>
+The <code>Tools</code> module will capture and interpret user's input into the
+executable commands.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-3" class="outline-3">
+<h3 id="sec-3-3"><span class="section-number-3">3.3</span> Stage</h3>
+<div class="outline-text-3" id="text-3-3">
+<ul class="org-ul">
+<li>Canvas
+</li>
+<li>Stash
+</li>
+</ul>
+
+<p>
+The <code>Stage</code> module will display the results of the user's commands.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-4" class="outline-3">
+<h3 id="sec-3-4"><span class="section-number-3">3.4</span> Bus</h3>
+<div class="outline-text-3" id="text-3-4">
+<ul class="org-ul">
+<li><code>History</code>
+This module will store the history of user interacting with the program.
+It will be responsible for reverting and replaying the commands.
+</li>
+
+<li><code>Command</code>
+This module records interactive commands performed by users.
+</li>
+
+<li><code>EventServer</code>
+This module mediates the input events to the connected clients.
+This server implements <code>IServer</code>.
+</li>
+
+<li><code>IClient</code>
+An interface a client must implement in order to be able to interact
+with <code>IServer</code>.
+</li>
+
+<li><code>IServer</code>
+An interface the server is required to implement.
+</li>
+
+<li><code>Server</code>
+A concrete but generic implementation of <code>IServer</code>.
+</li>
+</ul>
+
+<p>
+The <code>Bus</code> module will connect the parts and provide the interface
+to the outside world (load data, handle errors, persist data etc.)
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-5" class="outline-3">
+<h3 id="sec-3-5"><span class="section-number-3">3.5</span> Effects</h3>
+<div class="outline-text-3" id="text-3-5">
+<p>
+The <code>Effects</code> module will provide a library of visual or sound effects
+performed when user's action is carried out. Seems like there won't be
+any in this version.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-6" class="outline-3">
+<h3 id="sec-3-6"><span class="section-number-3">3.6</span> Debugging</h3>
+<div class="outline-text-3" id="text-3-6">
+<ul class="org-ul">
+<li>Console
+</li>
+</ul>
+<p>
+Because it's not possible currently to debug Flash written for players 11.3
+and later, this console will translate the logging output into JavaScript
+console (you will need to run the program in the browser to see it).
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Technical description</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+As of time of this writing I don't have enough experience to try
+to use <code>Stage3D</code> or similar modern rendering techniques, partially
+because of time limit and because of the development setting
+(<code>Stage3D</code> is buggy on Linux) this is out of scope for now.
+</p>
+
+<ul class="org-ul">
+<li>Target Flash Player version: 11.8
+</li>
+<li>SDK used for compilation: 4.11 (had to build from upstream developers
+version, there's not Linux distribution any more).
+</li>
+<li>Project uses Apache Ant 1.8.4, but most likely will work with 
+earlier versions too.
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> Project schema (UML)</h2>
+<div class="outline-text-2" id="text-5">
+
+<div class="figure">
+<p><img src="tryout.png" alt="tryout.png" />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> Building</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+The instructions are given for RHEL-like distro, based on my
+experience with Fedora Cora 18, ymmv.
+</p>
+<pre class="example">
+# yum install ant git java-1.7.0-openjdk
+</pre>
+<p>
+This was the easy part&#x2026;
+Now, checkout Flex SDK:
+</p>
+<pre class="example">
+$ cd ~
+$ mkdir ./flex
+$ cd ./flex
+$ git clone https://git-wip-us.apache.org/repos/asf/flex-sdk.git sdk
+</pre>
+<p>
+I will refer to <code>~/flex/flex-sdk</code> directory as <code>$FLEX_HOME</code>, if
+you cloned the SDK elsewhere, adjust your settings accordingly.
+Read carefully the Flex SDK readme and prepare to build it.
+</p>
+
+<p>
+It should be only necessary that you build the compiler, this can
+be can be done like so:
+</p>
+<pre class="example">
+$ cd $FLEX_SDK
+$ ant modules
+</pre>
+<p>
+You will only need <code>playerglobal.swc</code> and related part of the setup
+as outlined in the readme. You don't need to build or download
+neither TLF, nor AIR SDK. You will, however, need to download or
+build Batic Java library (used in compiler to transcode fonts).
+You don't need Blaze DS.
+</p>
+
+<p>
+Now you should be set to build the project. I will refer to
+project root directory as <code>$basedir</code>:
+</p>
+<pre class="example">
+$ cd $basedir
+$ vi ./build.xml
+</pre>
+<p>
+Change the value of <code>$FLEX_HOME</code> variable to where you installed
+Flex SDK. Also change the value of <code>playerglobal</code> variable to
+where you downloaded <code>playerglobal.swc</code>
+</p>
+<pre class="example">
+$ ant
+</pre>
+<p>
+You should be all set up now.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> Testing</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+There's a minimal test suite, to test run the tests:
+</p>
+<pre class="example">
+$ ant test
+</pre>
+</div>
+</div>
+<div id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> Running</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+The project comes with a minimalist server written in Python.
+Hopefully, no additional setup will be required. To start the
+server:
+</p>
+<pre class="example">
+$ cd $basedir/server
+$ ./services.py &amp;
+</pre>
+<p>
+Now the project should be available at <a href="http://localhost:8080/">http://localhost:8080/</a>
+See:
+</p>
+<pre class="example">
+$ ./services.py --help
+</pre>
+<p>
+for details on running the server.
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Oleg Sivokon</p>
+<p class="date">Created: 2013-12-02 Mon 14:35</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.50.1 (<a href="http://orgmode.org">Org</a> mode 8.2.2)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

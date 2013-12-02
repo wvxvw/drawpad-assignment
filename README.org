@@ -1,3 +1,9 @@
+#+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:./org-info.min.js
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="./solarized-dark.min.css" />
+
+# Styles and JavaScript are courtesy of
+# http://thomasf.github.io/solarized-css/
+
 * Cool Stuff
   I've recorded a [[http://youtu.be/Ne8dEZ4QpOc][video]] to make it simpler for you to understand
   what this project is doing :)
@@ -167,6 +173,221 @@
     version, there's not Linux distribution any more).
   + Project uses Apache Ant 1.8.4, but most likely will work with 
     earlier versions too.
+
+* Project schema (UML)
+  #+BEGIN_SRC plantuml :file tryout.png
+    @startuml
+    
+    package tld.wvxvw.drawpad.bus <<Rect>> {
+      interface ICommand {
+        +ICommand execute()
+        +ICommand udo()
+      }
+    
+      interface IClient {
+        +IServer server
+        +void handle(String response, Array data)
+      }
+      
+      interface IServer {
+        +void add(IClient client)
+        +void request(IClient client, String request, Array data)
+      }
+      
+      class Command {
+        +ICommand execute()
+        +ICommand udo()
+      }
+      
+      class Server {
+        +void add(IClient client)
+        +void echo(String command, Array args)
+        +void fail(IClient client, String command, Array args)
+        +void disconnect(IClient client)
+        +void request(IClient client, String request, Array data)
+        #void onRequest(IClient client, String request, Array data)
+        +Vector.<String> listServices()
+        +Array serviceArguments(String name, Boolean mandatoryOnly)
+        +IAsyncInputStream callRpcService(IClient client, String name, Array args)
+        +void loadConfig(Init config)
+      }
+      
+      class EventServer {
+        +void help(Event event)
+        +void complete(IClient client)
+        +void place(Shape shape)
+        +void moveLeft(Event event)
+        +void moveUp(Event event)
+        +void moveDown(Event event)
+        +void move(Event event)
+        +void rotateLeft(Event event)
+        +void rotateRight(Event event)
+        +void select(Event event)
+        +void drop(Event event)
+      }
+      
+      class History {
+        +Boolean inhibit
+        +void push(ICommand command)
+        +void undo()
+      }
+    }
+    
+    package tld.wvxvw.drawpad.config <<Rect>> {
+      class Init {
+        +Object keybindings()
+        +Object server()
+      }
+    }
+    
+    package tld.wvxvw.drawpad.stage <<Rect>> {
+      class Canvas {
+        +void pick(Shape shape, int x, int y)
+        +void drop(int x, int y)
+        +void rotate(int angle)
+        #Vector.<Function> rotateCommand(int angle)
+        #Vector.<Function> pickCommand(Shape shape, int x, int y)
+        #Vector.<Function> dropCommand(int x, int y)
+        #Vector.<Function> selectCommand(int x, int y)
+      }
+      
+      class GraphicClient {
+        +IServer server
+        #DisplayObjectContainer renderer
+        #Vector.<DisplayObject> childern
+        #Vector.<String> commands
+        #DisplayObject selection
+        #History history
+        #IServer eventServer
+        #Boolean ourSelection
+        +void yank(DisplayObject child)
+        +void select(int x, int y)
+        +void unselect(int x, int y)
+        +void move(int x, int y)
+        #doInteractiveCommand(Vector.<Function> action)
+        #Vector.<Function> placeCommand(DisplayObject child)
+        #Vector.<Function> yankCommand(DisplayObject child)
+        #Vector.<Function> selectCommand(int x, int y)
+        #Vector.<Function> unselectCommand(int x, int y)
+        #Vector.<Function> moveCommand(int x, int y)
+      }
+      
+      class Stash {
+        #Vector.<Function> yankCommand(DisplayObject child)
+        #Vector.<Function> moveCommand(int x, int y)
+        #Vector.<Function> placeCommand(DisplayObject child)
+        #Vector.<Function> selectCommand(int x, int y)
+        #Vector.<Function> unselectCommand(int x, int y)
+      }
+    }
+    
+    package tld.wvxvw.drawpad.tools <<Rect>> {
+      class Keymap {
+        +void defineKey(String keycode, Function handler)
+        +void definePrefixKey(String key)
+        +void dispatch(Event event)
+      }
+    }
+    
+    package tld.wvxvw.functions <<Rect>> {
+      class Futils {
+        +{static} Function bind(Function func, Object scope)
+      }
+    }
+    
+    package tld.wvxvw.postscript <<Rect>> {
+      class PostScriptError {
+      }
+      
+      class Context {
+        +Boolean isString
+        +Boolean isComment
+        +void flush()
+        +void reset()
+        +Context offspring()
+      }
+      
+      class ErrorMessage {
+        +String ARGUMENT_COUNT_MISMATCH
+        +String UNKNOWN_OPCODE
+      }
+      
+      interface IAsyncInputStream {
+        +Boolean isAtEnd
+        +Boolean isAtStart
+        +void readChar(Function callback)
+        +void readLine(Function callback)
+        +void readToken(Function callback, RegExp delimiter)
+      }
+      
+      class Interpreter {
+        +Shape shape
+        +void interpret(IAsyncInputStream stream, Context context)
+      }
+      
+      interface IOpcode {
+        +void bind(Context context, Object argument)
+        +void invoke(Context context)
+        +Boolean needMoreArguments()
+      }
+      
+      class PS {
+        +EventDispatcher load(IAsyncInputStream stream, Shape shape)
+      }
+      
+      class Reader {
+        +void read(String token)
+      }
+      
+      interface IEventDispatcher {
+      }
+      
+      class StringAsyncStream {
+        +Boolean isAtEnd
+        +Boolean isAtStart
+        +void readChar(Function callback)
+        +void readLine(Function callback)
+        +void readToken(Function callback, RegExp delimiter)
+      }
+      
+      class UrlAsyncStream {
+        +Boolean isAtEnd
+        +Boolean isAtStart
+        +void readChar(Function callback)
+        +void readLine(Function callback)
+        +void readToken(Function callback, RegExp delimiter)
+      }
+    }
+    
+    Application <|-- Sprite
+    Command <|-- ICommand
+    EventServer <|-- Server
+    Server <|--- IServer
+    Init <|-- ByteArray
+    Canvas <|-- GraphicClient
+    Stash <|-- GraphicClient
+    Interpreter <|-- EventDispatcher
+    StringAsyncStream <|-- EventDispatcher
+    StringAsyncStream <|-- IAsyncInputStream
+    UrlAsyncStream <|-- EventDispatcher
+    UrlAsyncStream <|-- IAsyncInputStream
+    IAsyncInputStream <|-- IEventDispatcher
+    PostScriptError <|-- Error
+    Reader <|-- EventDispatcher
+    
+    Application o-- Canvas
+    Application o-- Stash
+    Application o-- Init
+    Application o-- PS
+    
+    PS o-- Interpreter
+    
+    Interpreter o-- Reader
+    Interpreter o-- IAsyncInputStream
+    
+    Reader o-- Context
+    @enduml
+  #+END_SRC
 
 * Building
   The instructions are given for RHEL-like distro, based on my
